@@ -311,6 +311,8 @@ export class TrainingScene {
     this.stepProjectiles(dtMs);
     this.updateDummy(dtMs);
 
+    this.separateBodies();
+
     // 화면 밖으로 못 나가게
     this.player.pos.x = Math.max(-9, Math.min(9, this.player.pos.x));
     this.player.pos.y = Math.max(-5.5, Math.min(5.5, this.player.pos.y));
@@ -319,6 +321,33 @@ export class TrainingScene {
   }
 
   private pendingActiveSkill: SkillDef | null = null;
+
+  /**
+   * 몸끼리 겹치지 않게 밀어낸다.
+   *
+   * 회피 구르기는 이동 거리가 고정이라 적을 통과해 버릴 수 있는데,
+   * 그러면 "배후를 잡았다"는 판정이 우연에 가까워진다. 논타겟 액션에서
+   * 위치 관계는 피해 배율(정면/측면/배후)에 직접 들어가므로 겹침을 허용하면 안 된다.
+   */
+  private separateBodies(): void {
+    const minDistance = this.player.opts.radius + this.dummy.opts.radius;
+    const dx = this.player.pos.x - this.dummy.pos.x;
+    const dy = this.player.pos.y - this.dummy.pos.y;
+    const distance = Math.hypot(dx, dy);
+    if (distance >= minDistance) return;
+
+    // 완전히 같은 자리에 있으면 방향이 없으므로 임의로 밀어낸다
+    if (distance < 1e-4) {
+      this.player.pos = { x: this.dummy.pos.x + minDistance, y: this.dummy.pos.y };
+      return;
+    }
+
+    const push = minDistance - distance;
+    this.player.pos = {
+      x: this.player.pos.x + (dx / distance) * push,
+      y: this.player.pos.y + (dy / distance) * push,
+    };
+  }
 
   /* ---------------------------- 히트 판정 ---------------------------- */
 
