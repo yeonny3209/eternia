@@ -7,7 +7,7 @@
  * 기획서 10-0의 연결 그래프를 그대로 써서, 인접 맵으로 가는 포탈을
  * 맵 가장자리에 배치한다. 저렙이 고렙 맵에 갈 수 있다 — 죽을 뿐이다(기획서 1-2 ①).
  */
-import { MAPS, MAP_BY_ID, POIS, type MapDef } from '@eternia/shared';
+import { MAPS, MAP_BY_ID, NPC_BY_ID, POIS, type MapDef } from '@eternia/shared';
 
 export interface Vec2 {
   x: number;
@@ -372,11 +372,12 @@ export function generateMap(mapId: string): GeneratedMap {
   def.npcs.forEach((npcId, index) => {
     const angle = (index / Math.max(1, def.npcs.length)) * Math.PI * 2;
     const distance = clearRadius - 2.2;
+    const npcDef = NPC_BY_ID.get(npcId);
     npcs.push({
       id: npcId,
-      name: npcId,
+      name: npcDef?.name ?? npcId,
       pos: { x: center.x + Math.cos(angle) * distance, y: center.y + Math.sin(angle) * distance },
-      role: '',
+      role: npcDef?.role ?? '',
     });
   });
 

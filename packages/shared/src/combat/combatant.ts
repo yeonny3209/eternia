@@ -124,17 +124,26 @@ export class Combatant {
 
   /* --------------------------- 입력 --------------------------- */
 
-  /** 회피 구르기. 서버 수신 시각을 넣는다 */
-  tryDodge(nowMs: number): boolean {
+  /**
+   * 회피 구르기. 서버 수신 시각을 넣는다.
+   *
+   * @param direction 구를 방향(라디안). 생략하면 조준 방향으로 구른다.
+   *   3인칭에서는 조준(카메라 정면)과 이동 방향이 다르므로 따로 받아야 한다 —
+   *   뒤로 구르기가 안 되면 회피가 자원으로서 의미를 잃는다.
+   */
+  tryDodge(nowMs: number, direction?: number): boolean {
     if (!this.alive || this.guard.isStunned(nowMs)) return false;
     if (!this.action.canCancel('DODGE')) return false;
     const result = this.stamina.dodge(nowMs);
     if (!result.ok) return false;
     this.action.interrupt();
     this.guard.stopGuard(nowMs);
-    // 회피는 조준 방향으로 굴러간다
+    const heading = direction ?? this.aim;
     const d = this.stamina.config.dodgeDistance;
-    this.pos = { x: this.pos.x + Math.cos(this.aim) * d, y: this.pos.y + Math.sin(this.aim) * d };
+    this.pos = {
+      x: this.pos.x + Math.cos(heading) * d,
+      y: this.pos.y + Math.sin(heading) * d,
+    };
     return true;
   }
 

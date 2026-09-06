@@ -29,7 +29,7 @@ import {
   type QuestDef,
   type QuestProgress,
 } from '@eternia/shared';
-import { WorldScene, PPM } from '../world/WorldScene.js';
+import { WorldScene } from '../world/WorldScene.js';
 import { WORLD_LAYOUT, generateMap } from '../world/mapgen.js';
 import {
   BACKGROUNDS,
@@ -189,7 +189,12 @@ function mountWorld(root: HTMLElement): void {
   root.innerHTML = `
     <div class="game-wrap">
       <div class="game-stage">
-        <canvas id="world"></canvas>
+        <div id="world" class="world3d"></div>
+        <div class="lock-hint" id="lock-hint">
+          <strong>화면을 클릭하면 시작합니다</strong>
+          <span>마우스로 시점 · WASD 이동 · 좌클릭 공격 · <kbd>Esc</kbd>로 커서 해제</span>
+          <span class="dim">마우스 잠금이 막힌 환경이면 <kbd>←</kbd><kbd>→</kbd>로 시점을 돌릴 수 있습니다</span>
+        </div>
 
         <div class="hud-top">
           <div class="hud-name">
@@ -231,16 +236,14 @@ function mountWorld(root: HTMLElement): void {
       <div id="panel-host"></div>
     </div>`;
 
-  const canvas = root.querySelector<HTMLCanvasElement>('#world') as HTMLCanvasElement;
-  const resize = () => {
-    const width = Math.max(360, Math.floor(canvas.clientWidth));
-    canvas.width = width;
-    canvas.height = Math.round(Math.min(620, Math.max(360, width * 0.58)));
-  };
-  resize();
-  window.addEventListener('resize', resize);
+  const stage = root.querySelector<HTMLElement>('#world') as HTMLElement;
+  const lockHint = root.querySelector<HTMLElement>('#lock-hint');
+  // 잠금이 거부되더라도 안내가 화면을 계속 가리면 안 된다
+  lockHint?.addEventListener('click', () => {
+    lockHint.style.display = 'none';
+  });
 
-  scene = new WorldScene(canvas, state, {
+  scene = new WorldScene(stage, state, {
     onToast: (text, kind) => toast(text, kind),
     onKill: (monsterId) => {
       pushQuestEvent({ type: 'KILL', target: monsterId });
@@ -272,6 +275,10 @@ function mountWorld(root: HTMLElement): void {
     onStateChanged: () => {
       persist();
       refreshHud();
+    },
+    onPointerLockChange: (locked) => {
+      const hint = document.getElementById('lock-hint');
+      if (hint) hint.style.display = locked ? 'none' : 'grid';
     },
   });
 
@@ -473,7 +480,15 @@ function renderMinimap(hud: ReturnType<WorldScene['hud']>): void {
     ctx.fill();
   }
 
+  // 플레이어 — 3인칭에서는 어디를 보고 있는지가 중요하다
   const me = toMini(hud.pos);
+  ctx.fillStyle = 'rgba(96,165,250,0.28)';
+  ctx.beginPath();
+  ctx.moveTo(me.x, me.y);
+  ctx.arc(me.x, me.y, 16, hud.aim - 0.5, hud.aim + 0.5);
+  ctx.closePath();
+  ctx.fill();
+
   ctx.fillStyle = '#60a5fa';
   ctx.beginPath();
   ctx.arc(me.x, me.y, 3.2, 0, Math.PI * 2);
@@ -1074,4 +1089,4 @@ function characterView(): string {
     <button class="action danger" data-reset-save>처음부터 다시 시작</button>`;
 }
 
-export { PPM, generateMap };
+export { generateMap };

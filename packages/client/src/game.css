@@ -755,3 +755,84 @@ button.action.danger:hover {
 .hotbar .slot.empty {
   opacity: 0.45;
 }
+
+/* ---------------------------- 3D 월드 ---------------------------- */
+
+.world3d {
+  position: relative;
+  width: 100%;
+  height: clamp(420px, 62vh, 680px);
+  overflow: hidden;
+}
+
+.world3d canvas {
+  display: block;
+}
+
+.world3d-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.f3d {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-weight: 700;
+  white-space: nowrap;
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.85),
+    0 0 2px rgba(0, 0, 0, 0.9);
+}
+
+.prompt3d {
+  position: absolute;
+  left: 50%;
+  bottom: 27%;
+  transform: translateX(-50%);
+  background: rgba(6, 11, 22, 0.86);
+  border: 1px solid rgba(250, 204, 21, 0.55);
+  color: #fde68a;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.lock-hint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  background: rgba(3, 6, 14, 0.55);
+  backdrop-filter: blur(2px);
+  cursor: pointer;
+  z-index: 5;
+}
+
+.lock-hint strong {
+  font-size: 19px;
+}
+
+.lock-hint span {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.lock-hint kbd {
+  background: rgba(20, 28, 48, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0 5px;
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--text);
+}
+
+.lock-hint .dim {
+  opacity: 0.62;
+  font-size: 11.5px;
+}

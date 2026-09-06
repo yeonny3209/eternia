@@ -69,7 +69,7 @@ const MILESTONES: Milestone[] = [
       { label: '자세 붕괴(그로기) 게이지', status: 'DONE', note: 'PvE 3초/+80%, PvP 1.2초/+35%' },
       { label: '데미지 공식 (6-3-5)', status: 'DONE', note: '난수를 주입받아 결정적으로 검증' },
       { label: '허수아비 테스트 씬', status: 'DONE', note: '이 페이지의 훈련장 탭' },
-      { label: '캐릭터 이동/카메라, 맵 로더', status: 'DONE', note: '19개 맵을 절차 생성 + 카메라 추적' },
+      { label: '캐릭터 이동/카메라, 맵 로더', status: 'DONE', note: '3인칭 3D(Three.js). 19개 맵 절차 생성 + 추적 카메라' },
       { label: '처형 모션 연출', status: 'TODO', note: '판정(canExecute)은 있으나 연출 없음' },
     ],
   },

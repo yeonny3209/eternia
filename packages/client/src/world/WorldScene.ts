@@ -1,20 +1,20 @@
 /**
- * 월드 씬 — 실제로 걸어다니는 오픈월드.
+ * 월드 씬 — 3인칭 오픈월드.
  *
- * 판정은 전부 @eternia/shared를 쓴다. 서버가 붙으면 이 파일의 update()가
- * 그대로 서버 틱이 되고, 클라이언트는 렌더만 남는다.
+ * 판정은 전부 @eternia/shared를 쓴다. 게임 로직은 2D 평면(x, y)에서 돌고,
+ * Renderer3D가 그것을 (x, z)로 옮겨 3D로 그린다.
+ * 렌더러를 2D에서 3D로 갈아끼우는 동안 전투·퀘스트 코드는 한 줄도 바뀌지 않았다 —
+ * 기획서 2-2의 "판정은 서버가 한다"를 지키려고 로직과 렌더를 갈라 둔 덕이다.
  *
  * 기획서 1-2 ①: 레벨 제한으로 맵을 막지 않는다. 저렙도 고렙 맵에 갈 수 있다 — 죽을 뿐이다.
  */
 import {
   Combatant,
   ITEMS,
-  ITEM_BY_ID,
   MONSTER_BY_ID,
-  NPC_BY_ID,
   POI_BY_ID,
-  SKILL_BY_ID,
   RARITY_META,
+  SKILL_BY_ID,
   hitPosition,
   levelFactor,
   partyExpShare,
@@ -27,6 +27,7 @@ import {
   type MonsterDef,
   type SkillDef,
 } from '@eternia/shared';
+import { Renderer3D, type RenderSnapshot } from './Renderer3D.js';
 import { arrivalPoint, generateMap, type GeneratedMap, type Vec2 } from './mapgen.js';
 import {
   POTION_HEAL,
@@ -39,8 +40,6 @@ import {
 } from './player.js';
 
 const TICK_MS = 1000 / 30;
-/** 1미터당 픽셀 */
-export const PPM = 30;
 
 /** 몬스터가 플레이어를 알아채는 거리 */
 const AGGRO_RANGE = 7.5;
@@ -51,6 +50,11 @@ const RESPAWN_MS = 22_000;
 /** 비전투 자연 회복 — 이게 없으면 한 번 다친 뒤로는 계속 불리하다 */
 const REGEN_DELAY_MS = 5_000;
 const REGEN_PER_SEC = 0.045;
+
+/** 마우스 감도 (라디안/픽셀) */
+const LOOK_SENSITIVITY = 0.0032;
+/** 방향키 시점 회전 속도 (라디안/초) — 마우스 잠금이 막힌 환경의 대비책 */
+const ARROW_LOOK_SPEED = 2.4;
 
 export type ToastKind = 'INFO' | 'LOOT' | 'LEVEL' | 'DANGER' | 'QUEST';
 
@@ -65,6 +69,8 @@ export interface WorldCallbacks {
   onPotionUsed(remaining: number): void;
   onPlayerDeath(): void;
   onStateChanged(): void;
+  /** 마우스 잠금 상태가 바뀌었다 — UI가 안내를 띄운다 */
+  onPointerLockChange(locked: boolean): void;
 }
 
 interface MonsterEntity {
@@ -72,7 +78,6 @@ interface MonsterEntity {
   combatant: Combatant;
   home: Vec2;
   state: 'IDLE' | 'CHASE' | 'ATTACK' | 'RETURN' | 'DEAD';
-  nextAttackAt: number;
   telegraphAt: number;
   attackAt: number;
   respawnAt: number;
@@ -104,8 +109,7 @@ export interface HotbarSlot {
 }
 
 export class WorldScene {
-  private readonly canvas: HTMLCanvasElement;
-  private readonly ctx: CanvasRenderingContext2D;
+  private readonly renderer: Renderer3D;
   private readonly cb: WorldCallbacks;
 
   player: PlayerState;
@@ -121,17 +125,19 @@ export class WorldScene {
   private paused = false;
 
   private readonly keys = new Set<string>();
-  private cursorScreen: Vec2 = { x: 0, y: 0 };
   private pendingSkill: SkillDef | null = null;
   private pendingDodge = false;
   private pendingInteract = false;
   private pendingPotion = false;
-  private lastDamagedAt = -Infinity;
   private activeSkill: SkillDef | null = null;
+  private lastDamagedAt = -Infinity;
+  private moving = false;
 
   private readonly floaters: FloatingText[] = [];
   private readonly slashes: Slash[] = [];
-  private camera: Vec2 = { x: 0, y: 0 };
+
+  /** 마우스 잠금 상태 */
+  pointerLocked = false;
 
   /** 지금 상호작용할 수 있는 대상 */
   nearby: { kind: 'NPC' | 'PORTAL' | 'CAMPFIRE' | 'POI'; id: string; label: string } | null = null;
@@ -139,17 +145,16 @@ export class WorldScene {
   hotbar: HotbarSlot[] = [];
   private basicAttack!: SkillDef;
 
-  constructor(canvas: HTMLCanvasElement, player: PlayerState, callbacks: WorldCallbacks) {
-    this.canvas = canvas;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) throw new Error('2D 컨텍스트를 만들 수 없습니다');
-    this.ctx = ctx;
+  private readonly listeners: (() => void)[] = [];
+
+  constructor(container: HTMLElement, player: PlayerState, callbacks: WorldCallbacks) {
     this.player = player;
     this.cb = callbacks;
+    this.renderer = new Renderer3D(container);
 
     this.basicAttack = SKILL_BY_ID.get('sk_sw_slash') as SkillDef;
     this.loadMap(player.mapId, null);
-    this.rebuildHero();
+    this.rebuildHero(false);
     this.bindInput();
   }
 
@@ -157,11 +162,9 @@ export class WorldScene {
   /* 캐릭터                                                              */
   /* ------------------------------------------------------------------ */
 
-  /** 레벨업·장비 변경 후 전투 수치를 다시 만든다 */
   rebuildHero(keepPosition = true): void {
     const stats = derivedStats(this.player);
     const previous = this.hero;
-    const parryWindow = 250;
 
     this.hero = new Combatant({
       id: 'player',
@@ -175,7 +178,7 @@ export class WorldScene {
       critDmgBonus: stats.critDmg,
       radius: 0.5,
       moveSpeed: stats.moveSpeed,
-      parryWindowMs: parryWindow,
+      parryWindowMs: 250,
       faction: 'PLAYER',
     });
 
@@ -194,10 +197,9 @@ export class WorldScene {
   }
 
   private rebuildHotbar(): void {
-    const keys = ['Q', 'E', 'R', 'F'];
+    const keys = ['Q', 'R', 'F'];
     const classId = this.player.classId;
     if (!classId) {
-      // 직업을 정하기 전에는 기본 공격만 쓴다 (기획서 4-1)
       this.hotbar = [];
       this.basicAttack = SKILL_BY_ID.get('sk_sw_slash') as SkillDef;
       return;
@@ -205,9 +207,10 @@ export class WorldScene {
     const skills = skillsForClass(classId).filter((s) => s.kind !== 'PASSIVE');
     const basic = skills.find((s) => s.cooldownMs === 0 && s.kind === 'ACTIVE');
     this.basicAttack = basic ?? (SKILL_BY_ID.get('sk_sw_slash') as SkillDef);
+    // 히트박스가 없는 스킬(버프·소환)은 아직 효과를 구현하지 않았으므로 핫바에서 뺀다
     this.hotbar = skills
-      .filter((s) => s.id !== this.basicAttack.id)
-      .slice(0, 4)
+      .filter((s) => s.id !== this.basicAttack.id && s.hitbox !== null)
+      .slice(0, 3)
       .map((skill, index) => ({ key: keys[index] as string, skill }));
   }
 
@@ -224,7 +227,9 @@ export class WorldScene {
     this.player.mapId = mapId;
     if (!this.player.visitedMaps.includes(mapId)) this.player.visitedMaps.push(mapId);
 
-    this.monsters = this.map.spawns.map((spawn) => this.spawnMonster(spawn.monsterId, spawn.pos, spawn.isBoss));
+    this.monsters = this.map.spawns.map((spawn) =>
+      this.spawnMonster(spawn.monsterId, spawn.pos, spawn.isBoss),
+    );
     this.floaters.length = 0;
     this.slashes.length = 0;
 
@@ -232,6 +237,7 @@ export class WorldScene {
       this.hero.pos = arrivalPoint(this.map, fromMapId);
       this.hero.action.interrupt();
     }
+    this.renderer.setMap(this.map);
     this.cb.onEnterMap(mapId);
   }
 
@@ -258,7 +264,6 @@ export class WorldScene {
       combatant,
       home: { ...pos },
       state: 'IDLE',
-      nextAttackAt: 0,
       telegraphAt: -1,
       attackAt: -1,
       respawnAt: 0,
@@ -269,13 +274,20 @@ export class WorldScene {
   }
 
   /* ------------------------------------------------------------------ */
-  /* 입력                                                                */
+  /* 입력 — 3인칭 마우스 룩                                               */
   /* ------------------------------------------------------------------ */
 
   private bindInput(): void {
+    const canvas = this.renderer.canvas;
+
     const down = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
-      if ([' ', 'w', 'a', 's', 'd', 'q', 'e', 'r', 'f', '1'].includes(key)) e.preventDefault();
+      if (
+        [' ', 'w', 'a', 's', 'd', 'q', 'e', 'r', 'f', '1',
+         'arrowleft', 'arrowright', 'arrowup', 'arrowdown'].includes(key)
+      ) {
+        e.preventDefault();
+      }
       if (this.keys.has(key)) return;
       this.keys.add(key);
       if (this.paused) return;
@@ -288,31 +300,87 @@ export class WorldScene {
       if (slot) this.pendingSkill = slot.skill;
     };
     const up = (e: KeyboardEvent) => this.keys.delete(e.key.toLowerCase());
+    const blur = () => this.keys.clear();
 
     window.addEventListener('keydown', down);
     window.addEventListener('keyup', up);
-    window.addEventListener('blur', () => this.keys.clear());
-
-    this.canvas.addEventListener('mousemove', (e) => {
-      const rect = this.canvas.getBoundingClientRect();
-      this.cursorScreen = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    window.addEventListener('blur', blur);
+    this.listeners.push(() => {
+      window.removeEventListener('keydown', down);
+      window.removeEventListener('keyup', up);
+      window.removeEventListener('blur', blur);
     });
-    this.canvas.addEventListener('mousedown', (e) => {
-      e.preventDefault();
+
+    // 마우스 잠금 — 3인칭에서 커서가 화면을 벗어나면 시점을 못 돌린다
+    const requestLock = () => {
       if (this.paused) return;
+      if (document.pointerLockElement !== canvas) void canvas.requestPointerLock?.();
+    };
+    const onLockChange = () => {
+      this.pointerLocked = document.pointerLockElement === canvas;
+      if (!this.pointerLocked) this.keys.clear();
+      this.cb.onPointerLockChange(this.pointerLocked);
+    };
+    document.addEventListener('pointerlockchange', onLockChange);
+    this.listeners.push(() => document.removeEventListener('pointerlockchange', onLockChange));
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!this.pointerLocked || this.paused) return;
+      this.hero.aim += e.movementX * LOOK_SENSITIVITY;
+      this.renderer.camPitch = Math.max(
+        -0.35,
+        Math.min(0.95, this.renderer.camPitch + e.movementY * LOOK_SENSITIVITY * 0.7),
+      );
+    };
+    document.addEventListener('mousemove', onMouseMove);
+    this.listeners.push(() => document.removeEventListener('mousemove', onMouseMove));
+
+    const onMouseDown = (e: MouseEvent) => {
+      if (this.paused) return;
+      if (!this.pointerLocked) {
+        requestLock();
+        return;
+      }
+      e.preventDefault();
       if (e.button === 0) this.pendingSkill = this.basicAttack;
       if (e.button === 2) this.hero.startGuard(this.now);
-    });
-    this.canvas.addEventListener('mouseup', (e) => {
+    };
+    const onMouseUp = (e: MouseEvent) => {
       if (e.button === 2) this.hero.stopGuard(this.now);
+    };
+    const onContextMenu = (e: Event) => e.preventDefault();
+    canvas.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mouseup', onMouseUp);
+    canvas.addEventListener('contextmenu', onContextMenu);
+    this.listeners.push(() => {
+      canvas.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mouseup', onMouseUp);
+      canvas.removeEventListener('contextmenu', onContextMenu);
     });
-    this.canvas.addEventListener('contextmenu', (e) => e.preventDefault());
-    this.canvas.addEventListener('mouseleave', () => this.hero.stopGuard(this.now));
+
+    const onWheel = (e: WheelEvent) => {
+      if (!this.pointerLocked) return;
+      e.preventDefault();
+      this.renderer.camDistance = Math.max(
+        3.2,
+        Math.min(12, this.renderer.camDistance + e.deltaY * 0.006),
+      );
+    };
+    canvas.addEventListener('wheel', onWheel, { passive: false });
+    this.listeners.push(() => canvas.removeEventListener('wheel', onWheel));
+
+    const onResize = () => this.renderer.resize();
+    window.addEventListener('resize', onResize);
+    this.listeners.push(() => window.removeEventListener('resize', onResize));
   }
 
+  /** UI 패널이 열리면 마우스를 풀어 준다 */
   setPaused(paused: boolean): void {
     this.paused = paused;
-    if (paused) this.keys.clear();
+    if (paused) {
+      this.keys.clear();
+      if (document.pointerLockElement === this.renderer.canvas) document.exitPointerLock?.();
+    }
   }
 
   /* ------------------------------------------------------------------ */
@@ -335,7 +403,7 @@ export class WorldScene {
           this.accumulator -= TICK_MS;
         }
       }
-      this.render();
+      this.renderer.render(this.snapshot());
       this.rafId = requestAnimationFrame(loop);
     };
     this.rafId = requestAnimationFrame(loop);
@@ -344,18 +412,17 @@ export class WorldScene {
   stop(): void {
     this.running = false;
     cancelAnimationFrame(this.rafId);
+    for (const off of this.listeners) off();
+    this.listeners.length = 0;
+    this.renderer.dispose();
   }
 
   private tick(dt: number): void {
     this.now += dt;
 
-    // 카메라를 먼저 확정한다.
-    // 조준은 커서 화면 좌표를 월드 좌표로 바꿔서 구하는데, 그 변환이 카메라에 걸려 있다.
-    // 카메라를 render()에서만 갱신하면 프레임이 걸러진 틱에서 조준이 엉뚱한 곳을 향한다.
-    this.updateCamera();
+    this.updateArrowLook(dt);
 
     if (this.hero.alive) {
-      this.updateAim();
       this.updateMovement(dt);
       this.updateActions();
     }
@@ -373,7 +440,76 @@ export class WorldScene {
     this.syncPlayerState();
   }
 
-  /** 물약 — 기획서 6-3-1 퀵슬롯 */
+  /**
+   * 방향키로도 시점을 돌릴 수 있게 한다.
+   * 브라우저나 정책 때문에 마우스 잠금이 거부될 수 있는데,
+   * 그때 시점을 못 돌리면 게임 자체가 안 굴러간다.
+   */
+  private updateArrowLook(dt: number): void {
+    const step = (ARROW_LOOK_SPEED * dt) / 1000;
+    if (this.keys.has('arrowleft')) this.hero.aim -= step;
+    if (this.keys.has('arrowright')) this.hero.aim += step;
+    if (this.keys.has('arrowup')) {
+      this.renderer.camPitch = Math.max(-0.35, this.renderer.camPitch - step * 0.5);
+    }
+    if (this.keys.has('arrowdown')) {
+      this.renderer.camPitch = Math.min(0.95, this.renderer.camPitch + step * 0.5);
+    }
+  }
+
+  /** WASD는 카메라 기준이다 — 3인칭에서 절대 방향 이동은 조작이 안 된다 */
+  private inputDirection(): Vec2 | null {
+    const forward = { x: Math.cos(this.hero.aim), y: Math.sin(this.hero.aim) };
+    const right = { x: -Math.sin(this.hero.aim), y: Math.cos(this.hero.aim) };
+    const dir = { x: 0, y: 0 };
+    if (this.keys.has('w')) {
+      dir.x += forward.x;
+      dir.y += forward.y;
+    }
+    if (this.keys.has('s')) {
+      dir.x -= forward.x;
+      dir.y -= forward.y;
+    }
+    if (this.keys.has('d')) {
+      dir.x += right.x;
+      dir.y += right.y;
+    }
+    if (this.keys.has('a')) {
+      dir.x -= right.x;
+      dir.y -= right.y;
+    }
+    return dir.x === 0 && dir.y === 0 ? null : dir;
+  }
+
+  private updateMovement(dt: number): void {
+    const dir = this.inputDirection();
+    this.moving = dir !== null;
+
+    if (dir) {
+      const before = { ...this.hero.pos };
+      this.hero.move(dir, dt);
+      this.resolveTerrain(this.hero, before);
+    }
+
+    if (this.pendingDodge) {
+      this.pendingDodge = false;
+      // 입력 방향으로 구른다. 입력이 없으면 뒤로 물러난다.
+      const heading = dir ? Math.atan2(dir.y, dir.x) : this.hero.aim + Math.PI;
+      const before = { ...this.hero.pos };
+      if (this.hero.tryDodge(this.now, heading)) {
+        this.resolveTerrain(this.hero, before);
+        this.spawnFloater('회피', this.hero.pos, '#7dd3fc', 12);
+      }
+    }
+  }
+
+  private updateActions(): void {
+    if (!this.pendingSkill) return;
+    const skill = this.pendingSkill;
+    this.pendingSkill = null;
+    if (this.hero.useSkill(skill, this.now) !== null) this.activeSkill = skill;
+  }
+
   private updatePotion(): void {
     if (!this.pendingPotion) return;
     this.pendingPotion = false;
@@ -387,70 +523,16 @@ export class WorldScene {
       return;
     }
     const healed = this.hero.heal(POTION_HEAL);
-    this.spawnFloater(`+${healed}`, this.hero.pos, '#4ade80', 16);
+    this.spawnFloater(`+${Math.round(healed)}`, this.hero.pos, '#4ade80', 16);
     this.cb.onPotionUsed(potionCount(this.player));
     this.cb.onStateChanged();
   }
 
-  /**
-   * 비전투 자연 회복.
-   * 모닥불까지 걸어가야만 회복된다면 지도를 넓게 만든 의미가 없다 —
-   * 다친 채로 탐험을 이어갈 수 있어야 오픈월드가 굴러간다.
-   */
   private updateRegen(dt: number): void {
     if (!this.hero.alive) return;
     if (this.now - this.lastDamagedAt < REGEN_DELAY_MS) return;
     if (this.hero.hp >= this.hero.maxHp) return;
     this.hero.heal((this.hero.maxHp * REGEN_PER_SEC * dt) / 1000);
-  }
-
-  /** 카메라는 플레이어를 따라가되 맵 밖을 비추지 않는다 */
-  private updateCamera(): void {
-    const viewW = this.canvas.width / PPM;
-    const viewH = this.canvas.height / PPM;
-    this.camera = {
-      x: Math.max(viewW / 2, Math.min(this.map.width - viewW / 2, this.hero.pos.x)),
-      y: Math.max(viewH / 2, Math.min(this.map.height - viewH / 2, this.hero.pos.y)),
-    };
-    if (this.map.width < viewW) this.camera.x = this.map.width / 2;
-    if (this.map.height < viewH) this.camera.y = this.map.height / 2;
-  }
-
-  private updateAim(): void {
-    const world = this.screenToWorld(this.cursorScreen);
-    this.hero.aim = Math.atan2(world.y - this.hero.pos.y, world.x - this.hero.pos.x);
-  }
-
-  private updateMovement(dt: number): void {
-    const dir: Vec2 = { x: 0, y: 0 };
-    if (this.keys.has('w')) dir.y -= 1;
-    if (this.keys.has('s')) dir.y += 1;
-    if (this.keys.has('a')) dir.x -= 1;
-    if (this.keys.has('d')) dir.x += 1;
-
-    if (dir.x !== 0 || dir.y !== 0) {
-      const before = { ...this.hero.pos };
-      this.hero.move(dir, dt);
-      this.resolveTerrain(this.hero, before);
-    }
-
-    if (this.pendingDodge) {
-      this.pendingDodge = false;
-      const before = { ...this.hero.pos };
-      if (this.hero.tryDodge(this.now)) {
-        this.resolveTerrain(this.hero, before);
-        this.spawnFloater('회피', this.hero.pos, '#7dd3fc', 12);
-      }
-    }
-  }
-
-  private updateActions(): void {
-    if (!this.pendingSkill) return;
-    const skill = this.pendingSkill;
-    this.pendingSkill = null;
-    if (this.hero.useSkill(skill, this.now) !== null) {
-      this.activeSkill = skill;
-    }
   }
 
   /* ------------------------------------------------------------------ */
@@ -459,7 +541,6 @@ export class WorldScene {
 
   private resolveTerrain(entity: Combatant, previous: Vec2): void {
     const r = entity.opts.radius;
-    // 맵 밖으로 못 나간다
     entity.pos.x = Math.max(r, Math.min(this.map.width - r, entity.pos.x));
     entity.pos.y = Math.max(r, Math.min(this.map.height - r, entity.pos.y));
 
@@ -473,7 +554,6 @@ export class WorldScene {
         entity.pos = { ...previous };
         return;
       }
-      // 밀어내기 — 벽에 붙어 미끄러지게 해야 조작이 답답하지 않다
       entity.pos = {
         x: obstacle.pos.x + (dx / distance) * min,
         y: obstacle.pos.y + (dy / distance) * min,
@@ -505,10 +585,17 @@ export class WorldScene {
     }
 
     const targets: HitTarget[] = this.livingMonsters().map((m) => m.combatant.asTarget(this.now));
-    // 투사체까지 다루면 코드가 커진다. 원거리 스킬은 즉시 판정 형태로 근사한다.
-    const effective = box.type === 'PROJECTILE'
-      ? ({ type: 'LINE', length: box.maxDistance, width: box.radius * 4, pierce: box.pierce ?? 1 } as const)
-      : box;
+    // 투사체는 서버가 소유해야 하지만(기획서 6-3-6), 싱글 데모에서는
+    // 즉시 판정되는 직선으로 근사한다. 서버가 붙으면 Projectile로 교체한다.
+    const effective =
+      box.type === 'PROJECTILE'
+        ? ({
+            type: 'LINE',
+            length: box.maxDistance,
+            width: box.radius * 4,
+            pierce: box.pierce ?? 1,
+          } as const)
+        : box;
 
     const hits = resolveHitbox({ pos: this.hero.pos, aim: this.hero.aim }, effective, targets);
     for (const hit of hits) {
@@ -517,7 +604,12 @@ export class WorldScene {
     }
   }
 
-  private damageMonster(monster: MonsterEntity, skill: SkillDef, hit: HitResult, comboIndex: number): void {
+  private damageMonster(
+    monster: MonsterEntity,
+    skill: SkillDef,
+    hit: HitResult,
+    comboIndex: number,
+  ): void {
     const isCrit = Math.random() < this.hero.opts.critRate;
     const outcome = monster.combatant.takeHit({
       attackerId: this.hero.id,
@@ -538,18 +630,13 @@ export class WorldScene {
     const label = hit.position === 'BACK' ? `${outcome.damage} 배후!` : `${outcome.damage}`;
     this.spawnFloater(
       label,
-      { x: monster.combatant.pos.x, y: monster.combatant.pos.y - 0.6 },
+      monster.combatant.pos,
       isCrit ? '#fbbf24' : monster.combatant.poise.isGroggy(this.now) ? '#fca5a5' : '#f1f5f9',
-      isCrit ? 18 : 14,
+      isCrit ? 20 : 15,
     );
 
-    if (outcome.groggyBroke) {
-      this.spawnFloater('자세 붕괴!', monster.combatant.pos, '#f97316', 18);
-    }
-
-    // 맞으면 즉시 반응한다 — 때렸는데 가만히 있으면 사냥이 재미없다
+    if (outcome.groggyBroke) this.spawnFloater('자세 붕괴!', monster.combatant.pos, '#f97316', 19);
     if (monster.state === 'IDLE' || monster.state === 'RETURN') monster.state = 'CHASE';
-
     if (outcome.verdict === 'DEAD') this.killMonster(monster);
   }
 
@@ -566,8 +653,8 @@ export class WorldScene {
     this.player.kills[monster.def.id] = (this.player.kills[monster.def.id] ?? 0) + 1;
 
     const result = gainExp(this.player, exp);
-    this.spawnFloater(`+${exp} EXP`, { x: monster.combatant.pos.x, y: monster.combatant.pos.y - 1.4 }, '#a3e635', 13);
-    this.spawnFloater(`+${gold} G`, { x: monster.combatant.pos.x + 0.8, y: monster.combatant.pos.y - 0.9 }, '#fbbf24', 12);
+    this.spawnFloater(`+${exp} EXP`, monster.combatant.pos, '#a3e635', 13);
+    this.spawnFloater(`+${gold} G`, monster.combatant.pos, '#fbbf24', 12);
 
     this.cb.onKill(monster.def.id, monster.def.name);
 
@@ -582,7 +669,6 @@ export class WorldScene {
     this.cb.onStateChanged();
   }
 
-  /** 전리품 — 몬스터 레벨대에 맞는 아이템 중에서 고른다 */
   private rollLoot(monster: MonsterEntity): void {
     const chance = monster.isBoss ? 1 : monster.def.kind === 'ELITE' ? 0.55 : 0.18;
     if (Math.random() > chance) return;
@@ -597,7 +683,6 @@ export class WorldScene {
     );
     if (pool.length === 0) return;
 
-    // 보스는 희귀 이상만 준다
     const filtered = monster.isBoss
       ? pool.filter((i) => i.rarity !== 'COMMON' && i.rarity !== 'UNCOMMON')
       : pool;
@@ -605,14 +690,17 @@ export class WorldScene {
     const def = candidates[Math.floor(Math.random() * candidates.length)];
     if (!def) return;
 
-    const instance = rollItem(def, Math.random, `it_${Date.now().toString(36)}_${Math.floor(Math.random() * 1e6)}`);
+    const instance = rollItem(
+      def,
+      Math.random,
+      `it_${Date.now().toString(36)}_${Math.floor(Math.random() * 1e6)}`,
+    );
     if (!addItem(this.player, instance)) {
       this.cb.onToast('가방이 가득 찼습니다', 'DANGER');
       return;
     }
 
-    const meta = RARITY_META[def.rarity];
-    this.spawnFloater(def.name, { x: monster.combatant.pos.x, y: monster.combatant.pos.y - 2 }, meta.color, 14);
+    this.spawnFloater(def.name, monster.combatant.pos, RARITY_META[def.rarity].color, 15);
     this.cb.onLoot(instance);
   }
 
@@ -635,15 +723,12 @@ export class WorldScene {
       mob.update(dt, this.now);
       if (!mob.alive) continue;
 
-      const toPlayer = {
-        x: this.hero.pos.x - mob.pos.x,
-        y: this.hero.pos.y - mob.pos.y,
-      };
+      const toPlayer = { x: this.hero.pos.x - mob.pos.x, y: this.hero.pos.y - mob.pos.y };
       const distance = Math.hypot(toPlayer.x, toPlayer.y);
       const aggro = monster.isBoss ? AGGRO_RANGE_BOSS : AGGRO_RANGE;
       const homeDistance = Math.hypot(mob.pos.x - monster.home.x, mob.pos.y - monster.home.y);
 
-      if (mob.poise.isGroggy(this.now)) continue; // 그로기 중에는 아무것도 못 한다
+      if (mob.poise.isGroggy(this.now)) continue;
 
       switch (monster.state) {
         case 'IDLE': {
@@ -667,7 +752,7 @@ export class WorldScene {
             monster.attackAt = this.now + (monster.isBoss ? 800 : 620);
           } else {
             const before = { ...mob.pos };
-            mob.move({ x: toPlayer.x, y: toPlayer.y }, dt);
+            mob.move(toPlayer, dt);
             this.resolveTerrain(mob, before);
             this.separateFromOthers(monster);
           }
@@ -679,14 +764,13 @@ export class WorldScene {
             this.monsterAttack(monster);
             monster.state = 'CHASE';
             monster.telegraphAt = -1;
-            monster.nextAttackAt = this.now + (monster.isBoss ? 2300 : 1900) + Math.random() * 700;
           }
           break;
         }
         case 'RETURN': {
           if (homeDistance < 0.6) {
             monster.state = 'IDLE';
-            mob.hp = mob.maxHp; // 리쉬 복귀 시 회복 — 치고 빠지기 방지
+            mob.hp = mob.maxHp;
             break;
           }
           const before = { ...mob.pos };
@@ -720,7 +804,6 @@ export class WorldScene {
     this.resolveTerrain(monster.combatant, before);
   }
 
-  /** 몬스터끼리 겹쳐 서지 않게 */
   private separateFromOthers(monster: MonsterEntity): void {
     for (const other of this.monsters) {
       if (other === monster || other.state === 'DEAD') continue;
@@ -753,7 +836,7 @@ export class WorldScene {
     const hits = resolveHitbox({ pos: mob.pos, aim: mob.aim }, box, [this.hero.asTarget(this.now)]);
     if (hits.length === 0) {
       if (this.hero.stamina.wasInvulnerableAt(this.now)) {
-        this.spawnFloater('무적!', this.hero.pos, '#38bdf8', 14);
+        this.spawnFloater('무적!', this.hero.pos, '#38bdf8', 15);
       }
       return;
     }
@@ -763,8 +846,6 @@ export class WorldScene {
       attackerId: mob.id,
       attackerLevel: monster.def.level,
       attackerAtk: mob.opts.atk,
-      // 여러 마리가 붙으면 순식간에 죽는다. 한 대의 무게를 낮추고
-      // '여러 마리를 동시에 상대하는 상황' 자체를 위험 요소로 남긴다.
       skillCoef: monster.isBoss ? 1.3 : 0.8,
       comboIndex: 0,
       poiseDamage: monster.isBoss ? 40 : 18,
@@ -780,42 +861,38 @@ export class WorldScene {
     switch (outcome.verdict) {
       case 'PARRIED':
         mob.sufferParry(this.now);
-        this.spawnFloater('패리!', this.hero.pos, '#facc15', 20);
+        this.spawnFloater('패리!', this.hero.pos, '#facc15', 22);
         break;
       case 'IFRAME':
-        this.spawnFloater('무적!', this.hero.pos, '#38bdf8', 14);
+        this.spawnFloater('무적!', this.hero.pos, '#38bdf8', 15);
         break;
       case 'BLOCKED':
-        this.spawnFloater(`막음 ${outcome.damage}`, this.hero.pos, '#94a3b8', 13);
+        this.spawnFloater(`막음 ${outcome.damage}`, this.hero.pos, '#94a3b8', 14);
         break;
       case 'GUARD_BROKEN':
-        this.spawnFloater('가드 브레이크!', this.hero.pos, '#ef4444', 18);
+        this.spawnFloater('가드 브레이크!', this.hero.pos, '#ef4444', 19);
         break;
       case 'DEAD':
         this.spawnFloater('사망', this.hero.pos, '#ef4444', 22);
         this.onDeath();
         break;
       default:
-        this.spawnFloater(`-${outcome.damage}`, this.hero.pos, '#fca5a5', 14);
+        this.spawnFloater(`-${outcome.damage}`, this.hero.pos, '#fca5a5', 15);
     }
   }
 
   private onDeath(): void {
-    // 기획서 4-2절 범위 밖이라 페널티는 가볍게 — 골드 5%만 잃고 마을로
     const lost = Math.floor(this.player.gold * 0.05);
     this.player.gold -= lost;
     this.cb.onToast(`쓰러졌습니다. 골드 ${lost}를 잃었습니다.`, 'DANGER');
     this.cb.onPlayerDeath();
   }
 
-  /** 부활 — 가장 가까운 거점으로 */
   respawn(): void {
     this.hero.reset();
     this.hero.hp = this.hero.maxHp;
     const campfire = this.map.campfires[0];
     this.hero.pos = campfire ? { ...campfire } : { ...this.map.entry };
-    // 부활 지점에 몬스터가 몰려 있으면 일어나자마자 다시 죽는다.
-    // 3초의 유예를 준다 — 도망칠지 싸울지 정할 시간.
     this.hero.stamina.grantInvulnerability(this.now, 3000);
     this.lastDamagedAt = -Infinity;
     this.cb.onToast('부활했습니다 (3초간 무적)', 'INFO');
@@ -833,29 +910,28 @@ export class WorldScene {
 
     for (const npc of this.map.npcs) {
       const distance = Math.hypot(npc.pos.x - pos.x, npc.pos.y - pos.y);
-      if (distance < 2.4 && distance < best) {
+      if (distance < 2.6 && distance < best) {
         best = distance;
-        const def = NPC_BY_ID.get(npc.id);
-        found = { kind: 'NPC', id: npc.id, label: def?.name ?? npc.id };
+        found = { kind: 'NPC', id: npc.id, label: npc.name };
       }
     }
     for (const portal of this.map.portals) {
       const distance = Math.hypot(portal.pos.x - pos.x, portal.pos.y - pos.y);
-      if (distance < portal.radius + 0.8 && distance < best) {
+      if (distance < portal.radius + 1.0 && distance < best) {
         best = distance;
         found = { kind: 'PORTAL', id: portal.to, label: `${portal.toName}(으)로 이동` };
       }
     }
     for (const campfire of this.map.campfires) {
       const distance = Math.hypot(campfire.x - pos.x, campfire.y - pos.y);
-      if (distance < 2.2 && distance < best) {
+      if (distance < 2.4 && distance < best) {
         best = distance;
         found = { kind: 'CAMPFIRE', id: 'campfire', label: '모닥불에서 휴식' };
       }
     }
     for (const poi of this.map.pois) {
       const distance = Math.hypot(poi.pos.x - pos.x, poi.pos.y - pos.y);
-      if (distance < 2.4 && distance < best) {
+      if (distance < 2.6 && distance < best) {
         best = distance;
         found = { kind: 'POI', id: poi.id, label: `${poi.name} 조사` };
       }
@@ -882,21 +958,20 @@ export class WorldScene {
       this.hero.hp = this.hero.maxHp;
       this.hero.mp = this.hero.opts.maxMp;
       this.hero.stamina.refill();
-      this.spawnFloater('회복', this.hero.pos, '#4ade80', 16);
+      this.spawnFloater('회복', this.hero.pos, '#4ade80', 17);
       this.cb.onToast('모닥불에서 쉬었습니다. 체력이 모두 찼습니다.', 'INFO');
       this.cb.onStateChanged();
       return;
     }
     if (target.kind === 'POI') {
       const poi = POI_BY_ID.get(target.id);
-      this.spawnFloater('조사 완료', this.hero.pos, '#fde68a', 14);
+      this.spawnFloater('조사 완료', this.hero.pos, '#fde68a', 15);
       this.cb.onInteractPoi(target.id, poi?.name ?? target.id);
       return;
     }
     this.cb.onInteractNpc(target.id);
   }
 
-  /** 월드 지도에서 이동 — 이미 가 본 맵만 */
   travelTo(mapId: string): boolean {
     if (!this.player.visitedMaps.includes(mapId)) return false;
     const from = this.player.mapId;
@@ -910,454 +985,82 @@ export class WorldScene {
     this.player.mp = this.hero.mp;
   }
 
-  /* ------------------------------------------------------------------ */
-  /* 렌더링                                                              */
-  /* ------------------------------------------------------------------ */
-
   private spawnFloater(text: string, pos: Vec2, color: string, size: number): void {
-    this.floaters.push({ text, pos: { ...pos }, bornAt: this.now, color, size });
-    if (this.floaters.length > 60) this.floaters.shift();
+    this.floaters.push({
+      text,
+      pos: { x: pos.x + (Math.random() - 0.5) * 0.5, y: pos.y + (Math.random() - 0.5) * 0.5 },
+      bornAt: this.now,
+      color,
+      size,
+    });
+    if (this.floaters.length > 40) this.floaters.shift();
   }
 
-  private screenToWorld(screen: Vec2): Vec2 {
-    return {
-      x: this.camera.x + (screen.x - this.canvas.width / 2) / PPM,
-      y: this.camera.y + (screen.y - this.canvas.height / 2) / PPM,
-    };
-  }
+  /* ------------------------------------------------------------------ */
+  /* 렌더러에 넘길 스냅샷                                                  */
+  /* ------------------------------------------------------------------ */
 
-  private toScreen(world: Vec2): Vec2 {
-    return {
-      x: this.canvas.width / 2 + (world.x - this.camera.x) * PPM,
-      y: this.canvas.height / 2 + (world.y - this.camera.y) * PPM,
-    };
-  }
-
-  private render(): void {
-    const { ctx, canvas } = this;
-    const biome = this.map.biome;
-    ctx.fillStyle = biome.ground;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    this.renderGrid();
-    this.renderDecorations();
-    this.renderCampfires();
-    this.renderPortals();
-    this.renderPois();
-    this.renderObstacles();
-    this.renderNpcs();
-    this.renderSlashes();
-    this.renderMonsters();
-    this.renderHero();
-    this.renderFloaters();
-
-    // 분위기 오버레이
-    ctx.fillStyle = biome.haze;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    this.renderVignette();
-  }
-
-  private renderGrid(): void {
-    const { ctx } = this;
-    ctx.strokeStyle = this.map.biome.grid;
-    ctx.lineWidth = 1;
-    const start = this.screenToWorld({ x: 0, y: 0 });
-    const end = this.screenToWorld({ x: this.canvas.width, y: this.canvas.height });
-    for (let x = Math.floor(start.x / 4) * 4; x <= end.x; x += 4) {
-      const a = this.toScreen({ x, y: start.y });
-      const b = this.toScreen({ x, y: end.y });
-      ctx.beginPath();
-      ctx.moveTo(a.x, a.y);
-      ctx.lineTo(b.x, b.y);
-      ctx.stroke();
-    }
-    for (let y = Math.floor(start.y / 4) * 4; y <= end.y; y += 4) {
-      const a = this.toScreen({ x: start.x, y });
-      const b = this.toScreen({ x: end.x, y });
-      ctx.beginPath();
-      ctx.moveTo(a.x, a.y);
-      ctx.lineTo(b.x, b.y);
-      ctx.stroke();
-    }
-  }
-
-  private inView(pos: Vec2, pad = 4): boolean {
-    const dx = Math.abs(pos.x - this.camera.x);
-    const dy = Math.abs(pos.y - this.camera.y);
-    return dx < this.canvas.width / PPM / 2 + pad && dy < this.canvas.height / PPM / 2 + pad;
-  }
-
-  private renderDecorations(): void {
-    const { ctx } = this;
-    ctx.fillStyle = this.map.biome.decor;
-    ctx.globalAlpha = 0.32;
-    for (const decoration of this.map.decorations) {
-      if (!this.inView(decoration.pos, 2)) continue;
-      const p = this.toScreen(decoration.pos);
-      const size = decoration.scale * 3;
-      if (decoration.kind === 'GRASS') {
-        ctx.fillRect(p.x, p.y, 1.4, -size * 2);
-      } else {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, size * 0.6, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-    ctx.globalAlpha = 1;
-  }
-
-  private renderObstacles(): void {
-    const { ctx } = this;
-    for (const obstacle of this.map.obstacles) {
-      if (!this.inView(obstacle.pos, 4)) continue;
-      const p = this.toScreen(obstacle.pos);
-      const r = obstacle.radius * PPM;
-
-      // 그림자
-      ctx.fillStyle = 'rgba(0,0,0,0.25)';
-      ctx.beginPath();
-      ctx.ellipse(p.x, p.y + r * 0.25, r, r * 0.4, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      if (obstacle.kind === 'WATER') {
-        ctx.fillStyle = 'rgba(70,150,190,0.4)';
-        ctx.beginPath();
-        ctx.ellipse(p.x, p.y, r, r * 0.7, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(150,220,255,0.35)';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        continue;
-      }
-
-      if (obstacle.kind === 'BUILDING') {
-        const size = r * 1.5;
-        ctx.fillStyle = this.map.biome.propDark;
-        ctx.fillRect(p.x - size / 2, p.y - size * 0.9, size, size * 1.1);
-        ctx.fillStyle = this.map.biome.prop;
-        ctx.fillRect(p.x - size / 2, p.y - size * 0.9, size, size * 0.35);
-        continue;
-      }
-
-      if (obstacle.kind === 'TREE') {
-        ctx.fillStyle = this.map.biome.propDark;
-        ctx.fillRect(p.x - r * 0.18, p.y - r * 0.6, r * 0.36, r * 0.9);
-        ctx.fillStyle = this.map.biome.prop;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y - r * 0.9, r * 1.1, 0, Math.PI * 2);
-        ctx.fill();
-        continue;
-      }
-
-      if (obstacle.kind === 'CRYSTAL') {
-        ctx.fillStyle = this.map.biome.decor;
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y - r * 1.8);
-        ctx.lineTo(p.x + r * 0.7, p.y);
-        ctx.lineTo(p.x, p.y + r * 0.4);
-        ctx.lineTo(p.x - r * 0.7, p.y);
-        ctx.closePath();
-        ctx.fill();
-        continue;
-      }
-
-      // ROCK / RUIN
-      ctx.fillStyle = this.map.biome.prop;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y - r * 0.2, r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = this.map.biome.propDark;
-      ctx.beginPath();
-      ctx.arc(p.x - r * 0.25, p.y - r * 0.35, r * 0.5, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  private renderCampfires(): void {
-    const { ctx } = this;
-    for (const campfire of this.map.campfires) {
-      if (!this.inView(campfire, 3)) continue;
-      const p = this.toScreen(campfire);
-      const pulse = 0.7 + Math.sin(this.now / 260) * 0.3;
-      const gradient = ctx.createRadialGradient(p.x, p.y, 2, p.x, p.y, 60 * pulse);
-      gradient.addColorStop(0, 'rgba(255,170,60,0.5)');
-      gradient.addColorStop(1, 'rgba(255,140,40,0)');
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 60 * pulse, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#fb923c';
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 7, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  private renderPortals(): void {
-    const { ctx } = this;
-    for (const portal of this.map.portals) {
-      if (!this.inView(portal.pos, 4)) continue;
-      const p = this.toScreen(portal.pos);
-      const r = portal.radius * PPM;
-      const pulse = 0.75 + Math.sin(this.now / 400) * 0.25;
-
-      const gradient = ctx.createRadialGradient(p.x, p.y, 4, p.x, p.y, r * pulse);
-      gradient.addColorStop(0, 'rgba(160,120,255,0.55)');
-      gradient.addColorStop(1, 'rgba(120,90,220,0)');
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, r * pulse, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.strokeStyle = 'rgba(196,181,253,0.85)';
-      ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, r * 0.62, 0, Math.PI * 2);
-      ctx.stroke();
-
-      ctx.fillStyle = '#ddd6fe';
-      ctx.font = '600 13px system-ui, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(portal.toName, p.x, p.y - r * 0.8);
-    }
-  }
-
-  /** 퀘스트 장소 — 눈에 띄어야 찾아갈 마음이 든다 */
-  private renderPois(): void {
-    const { ctx } = this;
-    for (const poi of this.map.pois) {
-      if (!this.inView(poi.pos, 3)) continue;
-      const p = this.toScreen(poi.pos);
-      const pulse = 0.8 + Math.sin(this.now / 500 + poi.pos.x) * 0.2;
-
-      ctx.strokeStyle = `rgba(250,204,21,${0.35 * pulse})`;
-      ctx.lineWidth = 2;
-      ctx.setLineDash([6, 5]);
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 1.6 * PPM * pulse, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      ctx.fillStyle = 'rgba(250,204,21,0.85)';
-      ctx.beginPath();
-      ctx.moveTo(p.x, p.y - 12);
-      ctx.lineTo(p.x + 8, p.y);
-      ctx.lineTo(p.x, p.y + 12);
-      ctx.lineTo(p.x - 8, p.y);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.fillStyle = '#fde68a';
-      ctx.font = '600 11.5px system-ui, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(poi.name, p.x, p.y - 20);
-    }
-  }
-
-  private renderNpcs(): void {
-    const { ctx } = this;
-    for (const npc of this.map.npcs) {
-      if (!this.inView(npc.pos, 3)) continue;
-      const p = this.toScreen(npc.pos);
-      const def = NPC_BY_ID.get(npc.id);
-
-      ctx.fillStyle = 'rgba(0,0,0,0.3)';
-      ctx.beginPath();
-      ctx.ellipse(p.x, p.y + 8, 12, 5, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#e2e8f0';
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 11, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#334155';
-      ctx.beginPath();
-      ctx.arc(p.x, p.y - 3, 6, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#fde68a';
-      ctx.font = '600 12px system-ui, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(def?.name ?? npc.id, p.x, p.y - 20);
-    }
-  }
-
-  private renderSlashes(): void {
-    const { ctx } = this;
-    for (let i = this.slashes.length - 1; i >= 0; i -= 1) {
-      const slash = this.slashes[i] as Slash;
-      const age = this.now - slash.bornAt;
-      const life = slash.hostile ? 320 : 200;
-      if (age > life) {
-        this.slashes.splice(i, 1);
-        continue;
-      }
-      const alpha = (1 - age / life) * (slash.hostile ? 0.35 : 0.45);
-      const p = this.toScreen(slash.origin);
-      const half = ((slash.angle * Math.PI) / 180) / 2;
-      ctx.fillStyle = slash.hostile ? `rgba(248,113,113,${alpha})` : `rgba(147,197,253,${alpha})`;
-      ctx.beginPath();
-      ctx.moveTo(p.x, p.y);
-      ctx.arc(p.x, p.y, slash.range * PPM, slash.aim - half, slash.aim + half);
-      ctx.closePath();
-      ctx.fill();
-    }
-  }
-
-  private renderMonsters(): void {
-    const { ctx } = this;
-    for (const monster of this.monsters) {
-      if (monster.state === 'DEAD') continue;
-      const mob = monster.combatant;
-      if (!this.inView(mob.pos, 3)) continue;
-      const p = this.toScreen(mob.pos);
-      const r = mob.opts.radius * PPM;
-
-      // 공격 예고
-      if (monster.state === 'ATTACK' && monster.telegraphAt >= 0) {
-        const progress = Math.min(1, (this.now - monster.telegraphAt) / (monster.attackAt - monster.telegraphAt));
-        const half = ((monster.isBoss ? 140 : 100) * Math.PI) / 180 / 2;
-        ctx.fillStyle = `rgba(248,113,113,${0.1 + progress * 0.25})`;
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.arc(p.x, p.y, (mob.opts.radius + 2.2) * PPM, mob.aim - half, mob.aim + half);
-        ctx.closePath();
-        ctx.fill();
-      }
-
-      ctx.fillStyle = 'rgba(0,0,0,0.3)';
-      ctx.beginPath();
-      ctx.ellipse(p.x, p.y + r * 0.5, r, r * 0.4, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      if (mob.poise.isGroggy(this.now)) {
-        ctx.strokeStyle = 'rgba(249,115,22,0.95)';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, r + 5, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-
-      const color = monster.isBoss ? '#dc2626' : monster.def.kind === 'ELITE' ? '#c026d3' : '#b45309';
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // 바라보는 방향
-      ctx.strokeStyle = 'rgba(255,255,255,0.55)';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(p.x, p.y);
-      ctx.lineTo(p.x + Math.cos(mob.aim) * (r + 7), p.y + Math.sin(mob.aim) * (r + 7));
-      ctx.stroke();
-
-      // HP 바 — 다친 놈만
-      if (mob.hp < mob.maxHp) {
-        const width = Math.max(28, r * 2.4);
-        ctx.fillStyle = 'rgba(0,0,0,0.6)';
-        ctx.fillRect(p.x - width / 2, p.y - r - 12, width, 4);
-        ctx.fillStyle = monster.isBoss ? '#f87171' : '#4ade80';
-        ctx.fillRect(p.x - width / 2, p.y - r - 12, width * mob.hpRatio, 4);
-      }
-
-      if (monster.isBoss || monster.def.kind === 'ELITE') {
-        ctx.fillStyle = monster.isBoss ? '#fca5a5' : '#e9d5ff';
-        ctx.font = '600 12px system-ui, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(`${monster.def.name} Lv${monster.def.level}`, p.x, p.y - r - 17);
-      }
-    }
-  }
-
-  private renderHero(): void {
-    const { ctx } = this;
-    const p = this.toScreen(this.hero.pos);
-    const r = this.hero.opts.radius * PPM;
-
-    ctx.fillStyle = 'rgba(0,0,0,0.32)';
-    ctx.beginPath();
-    ctx.ellipse(p.x, p.y + r * 0.5, r, r * 0.4, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    if (this.hero.stamina.wasInvulnerableAt(this.now)) {
-      ctx.strokeStyle = 'rgba(56,189,248,0.9)';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, r + 7, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-    if (this.hero.guard.isGuarding) {
-      ctx.strokeStyle = 'rgba(226,232,240,0.9)';
-      ctx.lineWidth = 5;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, r + 4, this.hero.aim - 0.9, this.hero.aim + 0.9);
-      ctx.stroke();
-    }
-
-    ctx.fillStyle = this.hero.alive ? '#2563eb' : '#475569';
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = '#93c5fd';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    ctx.strokeStyle = '#bfdbfe';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(p.x, p.y);
-    ctx.lineTo(p.x + Math.cos(this.hero.aim) * (r + 12), p.y + Math.sin(this.hero.aim) * (r + 12));
-    ctx.stroke();
-
-    ctx.fillStyle = '#e2e8f0';
-    ctx.font = '600 12px system-ui, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(`${this.player.nickname} Lv${this.player.level}`, p.x, p.y - r - 12);
-
-    // 상호작용 안내
-    if (this.nearby) {
-      ctx.fillStyle = '#fde68a';
-      ctx.font = '600 13px system-ui, sans-serif';
-      ctx.fillText(`[E] ${this.nearby.label}`, p.x, p.y - r - 30);
-    }
-  }
-
-  private renderFloaters(): void {
-    const { ctx } = this;
-    ctx.textAlign = 'center';
+  private snapshot(): RenderSnapshot {
     for (let i = this.floaters.length - 1; i >= 0; i -= 1) {
-      const floater = this.floaters[i] as FloatingText;
-      const age = this.now - floater.bornAt;
-      if (age > 1000) {
-        this.floaters.splice(i, 1);
-        continue;
-      }
-      const p = this.toScreen(floater.pos);
-      ctx.globalAlpha = 1 - age / 1000;
-      ctx.fillStyle = floater.color;
-      ctx.font = `700 ${floater.size}px system-ui, sans-serif`;
-      ctx.strokeStyle = 'rgba(0,0,0,0.6)';
-      ctx.lineWidth = 3;
-      ctx.strokeText(floater.text, p.x, p.y - 24 - age / 26);
-      ctx.fillText(floater.text, p.x, p.y - 24 - age / 26);
-      ctx.globalAlpha = 1;
+      if (this.now - (this.floaters[i] as FloatingText).bornAt > 1100) this.floaters.splice(i, 1);
     }
-  }
+    for (let i = this.slashes.length - 1; i >= 0; i -= 1) {
+      if (this.now - (this.slashes[i] as Slash).bornAt > 400) this.slashes.splice(i, 1);
+    }
 
-  private renderVignette(): void {
-    const { ctx, canvas } = this;
-    const gradient = ctx.createRadialGradient(
-      canvas.width / 2, canvas.height / 2, canvas.height * 0.35,
-      canvas.width / 2, canvas.height / 2, canvas.height * 0.85,
-    );
-    gradient.addColorStop(0, 'rgba(0,0,0,0)');
-    gradient.addColorStop(1, 'rgba(0,0,0,0.45)');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    return {
+      nowMs: this.now,
+      player: {
+        pos: this.hero.pos,
+        aim: this.hero.aim,
+        radius: this.hero.opts.radius,
+        alive: this.hero.alive,
+        guarding: this.hero.guard.isGuarding,
+        invulnerable: this.hero.stamina.wasInvulnerableAt(this.now),
+        moving: this.moving,
+        nickname: this.player.nickname,
+        level: this.player.level,
+        hpRatio: this.hero.hpRatio,
+      },
+      monsters: this.monsters
+        .filter((m) => m.state !== 'DEAD')
+        .map((m) => ({
+          id: m.combatant.id,
+          pos: m.combatant.pos,
+          aim: m.combatant.aim,
+          radius: m.combatant.opts.radius,
+          hpRatio: m.combatant.hpRatio,
+          name: m.def.name,
+          level: m.def.level,
+          kind: m.def.kind,
+          isBoss: m.isBoss,
+          groggy: m.combatant.poise.isGroggy(this.now),
+          telegraph:
+            m.state === 'ATTACK' && m.telegraphAt >= 0
+              ? Math.min(1, (this.now - m.telegraphAt) / Math.max(1, m.attackAt - m.telegraphAt))
+              : null,
+          attackRange: m.combatant.opts.radius + 2.2,
+          attackAngle: m.isBoss ? 140 : 100,
+        })),
+      slashes: this.slashes.map((s) => ({
+        origin: s.origin,
+        aim: s.aim,
+        range: s.range,
+        angle: s.angle,
+        age: this.now - s.bornAt,
+        life: s.hostile ? 340 : 240,
+        hostile: s.hostile,
+      })),
+      floaters: this.floaters.map((f) => ({
+        text: f.text,
+        pos: f.pos,
+        age: this.now - f.bornAt,
+        life: 1100,
+        color: f.color,
+        size: f.size,
+      })),
+      prompt: this.nearby?.label ?? null,
+    };
   }
 
   /* ------------------------------------------------------------------ */
@@ -1374,6 +1077,7 @@ export class WorldScene {
       maxStamina: this.hero.stamina.max,
       alive: this.hero.alive,
       pos: { ...this.hero.pos },
+      aim: this.hero.aim,
       pois: this.map.pois.map((p) => ({ pos: { ...p.pos } })),
       monsters: this.monsters
         .filter((m) => m.state !== 'DEAD')
@@ -1387,6 +1091,7 @@ export class WorldScene {
       })),
       basicAttackName: this.basicAttack.name,
       potions: potionCount(this.player),
+      pointerLocked: this.pointerLocked,
     };
   }
 }
