@@ -1,0 +1,107 @@
+[
+  {
+    "id": "sword_saint",
+    "name": "검성",
+    "baseClasses": ["swordsman", "lancer"],
+    "levelReq": 45,
+    "concept": "스킬을 버리고 '기본 공격'만으로 정점에 오른 자",
+    "unlockSteps": [
+      "40레벨 이후, 스킬을 한 번도 쓰지 않고 필드 보스 3종 처치",
+      "'서리 고원'의 은둔자 '무명의 검객'을 3회 방문 (매번 실제 시간 24시간 간격)",
+      "그와의 결투에서 회피만으로 90초 생존",
+      "부러진 검 '무명(無銘)'을 대장장이 보른에게 재련"
+    ],
+    "skills": ["sk_hd_formless", "sk_hd_single_cut", "sk_hd_mind_eye", "sk_hd_sword_unity"],
+    "powerCap": 1.05
+  },
+  {
+    "id": "voidcaller",
+    "name": "공허술사",
+    "baseClasses": ["mage", "hexer"],
+    "levelReq": 45,
+    "concept": "균열 안으로 들어가, 균열이 된 자",
+    "unlockSteps": [
+      "균열 지역에서 10회 사망 (일반 사망도 카운트)",
+      "'균열의 황무지'에서 아무 스킬도 쓰지 않고 균열 중심부에 5분간 서 있기",
+      "히든 아이템 '공허를 본 눈' 획득",
+      "무명의 아이들 세력 평판 '우호' 이상"
+    ],
+    "skills": ["sk_hd_void_erosion", "sk_hd_dimension_rift", "sk_hd_backflow", "sk_hd_domain_of_nothing"],
+    "powerCap": 1.05
+  },
+  {
+    "id": "moonshade",
+    "name": "월영",
+    "baseClasses": ["assassin", "rogue"],
+    "levelReq": 45,
+    "concept": "달빛 아래에서만 존재하는 그림자",
+    "unlockSteps": [
+      "게임 내 시각 '심야'(00:00~03:00)에만 등장하는 NPC '달을 등진 자'를 발견",
+      "은신 상태로 누구에게도 발각되지 않고 '그늘 늪지'의 감시탑 5곳을 통과",
+      "단 한 명의 적도 죽이지 않고 던전 '침묵의 수도원'을 클리어",
+      "도적 스킬 '자물쇠 해체'로 달빛 사당의 문을 개방"
+    ],
+    "skills": ["sk_hd_moon_stealth", "sk_hd_shadow_leap", "sk_hd_traceless", "sk_hd_new_moon"],
+    "powerCap": 1.05
+  },
+  {
+    "id": "dragoon",
+    "name": "용기병",
+    "baseClasses": ["lancer", "swordsman"],
+    "levelReq": 47,
+    "concept": "용의 피를 마시고 하늘을 되찾은 기병",
+    "unlockSteps": [
+      "'부유섬 아에리스'의 비룡 둥지에서 알을 훔치지 않고 어미 비룡을 3회 격퇴",
+      "어미 비룡이 인정 → '비룡의 신뢰' 획득",
+      "창술사 스킬 '도약 강타'로 낙하 데미지 누적 10만 달성",
+      "흑요석 화산지대 용의 무덤에서 '용의 심장 조각' 획득 후 섭취 (HP 1로 3분 생존)"
+    ],
+    "skills": ["sk_hd_soar", "sk_hd_dragonblood", "sk_hd_summon_wyvern", "sk_hd_azure_fall"],
+    "powerCap": 1.05
+  },
+  {
+    "id": "plague_sovereign",
+    "name": "역병군주",
+    "baseClasses": ["hexer", "alchemist"],
+    "levelReq": 45,
+    "concept": "병을 다스려 병을 무기로 삼는다",
+    "unlockSteps": [
+      "서브 퀘스트 '그늘 늪지 역병 사태'에서 치료가 아닌 감염 확산을 선택",
+      "서로 다른 상태이상 12종을 하나의 대상에게 동시에 부여",
+      "역병 마을 '카사르'의 생존자 전원을 죽이지 않고 현실 3일 후 재방문",
+      "변이체 촌장에게서 '최초의 역병 표본' 수령"
+    ],
+    "skills": ["sk_hd_contagion", "sk_hd_plague_culture", "sk_hd_immune_collapse", "sk_hd_black_death"],
+    "powerCap": 1.05
+  },
+  {
+    "id": "stigmata",
+    "name": "성흔사",
+    "baseClasses": ["cantor", "priest"],
+    "levelReq": 47,
+    "concept": "타인의 고통을 자기 몸에 새겨 대신 진다",
+    "unlockSteps": [
+      "누적 회복량 500만 달성",
+      "자신이 단 한 번도 죽지 않은 상태로 파티원을 100회 부활",
+      "왕도 아르젠트 대성당 지하의 봉인된 고해실 발견 (힐러의 '정화'로만 개방)",
+      "최종 시험: 파티원 4명이 받는 모든 피해를 60초간 혼자 받아내며 생존"
+    ],
+    "skills": ["sk_hd_stigma", "sk_hd_price_of_pain", "sk_hd_martyrdom", "sk_hd_burden_of_all"],
+    "powerCap": 1.05
+  },
+  {
+    "id": "spiritshot",
+    "name": "정령사수",
+    "baseClasses": ["archer", "alchemist"],
+    "levelReq": 45,
+    "concept": "화살이 아니라 정령을 쏜다",
+    "unlockSteps": [
+      "'속삭이는 숲'의 정령 4종(불·물·바람·대지)을 전부 죽이지 않고 각각 대화 성공",
+      "활을 든 채로 몬스터를 1000마리 처치하는 동안 화살 1발도 쓰지 않기",
+      "'별빛 정원'의 세계수 앞에서 활을 부러뜨리기 (되돌릴 수 없음)",
+      "정령들이 새 활 '정령의 활시위'를 하사"
+    ],
+    "skills": ["sk_hd_spirit_load", "sk_hd_resonance", "sk_hd_tracking_spirit", "sk_hd_great_spirit"],
+    "powerCap": 1.05
+  }
+]

@@ -1,0 +1,53 @@
+[
+  { "id": "npc_elder_eladi", "name": "촌장 엘라디", "map": "dawnhollow", "role": "QUEST_GIVER" },
+  { "id": "npc_smith_boron", "name": "대장장이 보른", "map": "dawnhollow", "role": "BLACKSMITH" },
+  { "id": "npc_priest_mirea", "name": "신관 미레아", "map": "dawnhollow", "role": "CLASS_MASTER" },
+  { "id": "npc_merchant_tina", "name": "잡화상 티나", "map": "dawnhollow", "role": "MERCHANT" },
+  { "id": "npc_kid_run", "name": "꼬마 룬", "map": "dawnhollow", "role": "QUEST_GIVER" },
+  { "id": "npc_coachman", "name": "생존한 마부", "map": "dawnhollow", "role": "QUEST_GIVER" },
+
+  { "id": "npc_hunter_boron", "name": "사냥꾼 보론", "map": "whispering_woods", "role": "QUEST_GIVER" },
+  { "id": "npc_spirit_fire", "name": "불의 정령", "map": "whispering_woods", "role": "SPIRIT" },
+  { "id": "npc_spirit_water", "name": "물의 정령", "map": "whispering_woods", "role": "SPIRIT" },
+  { "id": "npc_spirit_wind", "name": "바람의 정령", "map": "whispering_woods", "role": "SPIRIT" },
+  { "id": "npc_spirit_earth", "name": "대지의 정령", "map": "whispering_woods", "role": "SPIRIT" },
+
+  { "id": "npc_nomad_elder", "name": "유목민 노인", "map": "haran_plains", "role": "QUEST_GIVER" },
+  { "id": "npc_sky_girl", "name": "하늘을 보는 아이", "map": "haran_plains", "role": "QUEST_GIVER" },
+  { "id": "npc_guild_caravan", "name": "조합 상단주", "map": "haran_plains", "role": "MERCHANT" },
+  { "id": "npc_watchtower_chief", "name": "감시탑 관리인", "map": "haran_plains", "role": "QUEST_GIVER" },
+
+  { "id": "npc_fisher", "name": "어부 하란", "map": "silverflow_basin", "role": "QUEST_GIVER" },
+  { "id": "npc_ferryman", "name": "나룻배 사공", "map": "silverflow_basin", "role": "QUEST_GIVER" },
+
+  { "id": "npc_guild_clerk", "name": "길드 관리인", "map": "kardein", "role": "GUILD" },
+  { "id": "npc_auctioneer", "name": "경매인", "map": "kardein", "role": "AUCTION" },
+  { "id": "npc_refiner", "name": "정제공 반장", "map": "kardein", "role": "QUEST_GIVER" },
+
+  { "id": "npc_miner_foreman", "name": "광산 감독", "map": "crimson_ravine", "role": "QUEST_GIVER" },
+  { "id": "npc_herbalist", "name": "늪의 약초사", "map": "shadowmire", "role": "QUEST_GIVER" },
+  { "id": "npc_survivor_kasar", "name": "카사르 생존자", "map": "shadowmire", "role": "QUEST_GIVER" },
+
+  { "id": "npc_hermit_swordsman", "name": "무명의 검객", "map": "frostreach", "role": "HIDDEN" },
+  { "id": "npc_yeti_chief", "name": "설인 족장", "map": "frostreach", "role": "MERCHANT" },
+  { "id": "npc_dead_merchant", "name": "지하의 상인", "map": "forgotten_aqueduct", "role": "MERCHANT" },
+
+  { "id": "npc_water_seller", "name": "사막의 물장수", "map": "sehab_ruins", "role": "MERCHANT" },
+  { "id": "npc_tomb_raider", "name": "도굴꾼 두목", "map": "sehab_ruins", "role": "QUEST_GIVER" },
+  { "id": "npc_sky_merchant", "name": "하늘 상인", "map": "aeris_isles", "role": "MERCHANT" },
+  { "id": "npc_flame_tribe", "name": "화염 부족장", "map": "obsidian_caldera", "role": "QUEST_GIVER" },
+
+  { "id": "npc_drowned_citizen", "name": "수몰 시민", "map": "sunken_laisha", "role": "QUEST_GIVER" },
+  { "id": "npc_fishman_king", "name": "어인의 왕", "map": "sunken_laisha", "role": "QUEST_GIVER" },
+
+  { "id": "npc_king", "name": "아르젠트 왕", "map": "argent_capital", "role": "QUEST_GIVER" },
+  { "id": "npc_cathedral_priest", "name": "대성당 사제", "map": "argent_capital", "role": "QUEST_GIVER" },
+  { "id": "npc_knight_captain", "name": "기사단장", "map": "argent_capital", "role": "QUEST_GIVER" },
+
+  { "id": "npc_rift_hunter", "name": "균열 사냥꾼", "map": "riftwastes", "role": "QUEST_GIVER" },
+  { "id": "npc_nameless_envoy", "name": "무명의 사자", "map": "riftwastes", "role": "FACTION" },
+  { "id": "npc_climber", "name": "오르는 자", "map": "skyspire", "role": "QUEST_GIVER" },
+  { "id": "npc_world_tree", "name": "세계수", "map": "starlit_garden", "role": "HIDDEN" },
+  { "id": "npc_verge_merchant", "name": "경계의 상인", "map": "nameless_verge", "role": "MERCHANT" },
+  { "id": "npc_nameless_one", "name": "이름 없는 자", "map": "nameless_verge", "role": "BOSS_NPC" }
+]

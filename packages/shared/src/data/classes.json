@@ -1,0 +1,640 @@
+[
+  {
+    "id": "swordsman",
+    "name": "검사",
+    "roles": ["DPS", "TANK"],
+    "difficulty": 1,
+    "mainStats": ["str", "vit"],
+    "weapons": ["한손검+방패", "양손검"],
+    "concept": "정면에서 받아내고 정면에서 갚는다. 가장 정직한 직업",
+    "growth": { "str": 3, "vit": 3, "agi": 1 },
+    "parryWindowMs": 250,
+    "skills": [
+      "sk_sw_slash",
+      "sk_sw_shield_bash",
+      "sk_sw_taunt_shout",
+      "sk_sw_earth_render",
+      "sk_sw_indomitable",
+      "sk_sw_execution"
+    ],
+    "branches": [
+      {
+        "id": "guardian_knight",
+        "name": "수호기사",
+        "level": 20,
+        "parent": null,
+        "description": "방패 특화. 파티원 대신 피해 흡수, 광역 도발 강화 → 던전/레이드 메인 탱커"
+      },
+      {
+        "id": "berserker",
+        "name": "광전사",
+        "level": 20,
+        "parent": null,
+        "description": "양손검 특화. 잃은 HP 비례 공격력 증가. 방어 포기형 극딜"
+      },
+      {
+        "id": "unbroken_wall",
+        "name": "불괴의 벽",
+        "level": 40,
+        "parent": "guardian_knight",
+        "description": "무적기 2개 보유"
+      },
+      {
+        "id": "rampart_commander",
+        "name": "성벽 지휘관",
+        "level": 40,
+        "parent": "guardian_knight",
+        "description": "파티 전체 방어 버프"
+      },
+      {
+        "id": "blood_tyrant",
+        "name": "피의 폭군",
+        "level": 40,
+        "parent": "berserker",
+        "description": "흡혈 특화"
+      },
+      {
+        "id": "one_strike",
+        "name": "일격필살",
+        "level": 40,
+        "parent": "berserker",
+        "description": "치명타 극대화"
+      }
+    ]
+  },
+  {
+    "id": "mage",
+    "name": "마법사",
+    "roles": ["DPS", "CONTROL"],
+    "difficulty": 3,
+    "mainStats": ["int", "wil"],
+    "weapons": ["지팡이", "마도서"],
+    "concept": "캐스팅 시간을 버티면 방 전체를 지운다",
+    "growth": { "int": 4, "wil": 2, "vit": 1 },
+    "parryWindowMs": 120,
+    "skills": [
+      "sk_mg_mana_bolt",
+      "sk_mg_fireball",
+      "sk_mg_frost_prison",
+      "sk_mg_chain_lightning",
+      "sk_mg_mana_cycle",
+      "sk_mg_meteor"
+    ],
+    "branches": [
+      {
+        "id": "elementalist",
+        "name": "원소술사",
+        "level": 20,
+        "parent": null,
+        "description": "화염/빙결/전격 3속성 순환. 다른 속성 연계 시 추가 폭발"
+      },
+      {
+        "id": "arcanist",
+        "name": "비전술사",
+        "level": 20,
+        "parent": null,
+        "description": "무속성 순수 마력. 영창 단축·관통 특화, 보스 단일 딜 강함"
+      },
+      {
+        "id": "cataclysmist",
+        "name": "대재해술사",
+        "level": 40,
+        "parent": "elementalist",
+        "description": "광역 극대화"
+      },
+      {
+        "id": "element_fusion",
+        "name": "원소 융합체",
+        "level": 40,
+        "parent": "elementalist",
+        "description": "연계 폭발 특화"
+      },
+      {
+        "id": "chronowarp",
+        "name": "시공 왜곡자",
+        "level": 40,
+        "parent": "arcanist",
+        "description": "스킬 쿨타임 조작"
+      },
+      {
+        "id": "mana_burnout",
+        "name": "마력 폭주자",
+        "level": 40,
+        "parent": "arcanist",
+        "description": "MP를 태워 데미지로"
+      }
+    ]
+  },
+  {
+    "id": "assassin",
+    "name": "암살자",
+    "roles": ["DPS"],
+    "difficulty": 4,
+    "mainStats": ["agi", "luk"],
+    "weapons": ["쌍단검", "손톱"],
+    "concept": "은신 → 배후 급습 → 재은신. 실수하면 즉사",
+    "growth": { "agi": 4, "luk": 2, "str": 1 },
+    "parryWindowMs": 160,
+    "skills": [
+      "sk_as_shadow_step",
+      "sk_as_backstab",
+      "sk_as_poison_blade",
+      "sk_as_afterimage",
+      "sk_as_weakpoint",
+      "sk_as_death_sentence"
+    ],
+    "branches": [
+      {
+        "id": "venomancer",
+        "name": "독조사",
+        "level": 20,
+        "parent": null,
+        "description": "도트 데미지 특화. 다수전과 장기전에 강함"
+      },
+      {
+        "id": "executioner",
+        "name": "처형자",
+        "level": 20,
+        "parent": null,
+        "description": "순간 폭딜 특화. 은신-급습 사이클 극단화"
+      },
+      {
+        "id": "plague_hand",
+        "name": "역병의 손",
+        "level": 40,
+        "parent": "venomancer",
+        "description": "독 전염"
+      },
+      {
+        "id": "rot_sigil",
+        "name": "부패 각인",
+        "level": 40,
+        "parent": "venomancer",
+        "description": "회복 차단 디버프"
+      },
+      {
+        "id": "blade_of_moment",
+        "name": "찰나의 검",
+        "level": 40,
+        "parent": "executioner",
+        "description": "은신 쿨 대폭 감소"
+      },
+      {
+        "id": "shadow_clone",
+        "name": "그림자 분신",
+        "level": 40,
+        "parent": "executioner",
+        "description": "분신 소환 협공"
+      }
+    ]
+  },
+  {
+    "id": "rogue",
+    "name": "도적",
+    "roles": ["DPS", "SUPPORT"],
+    "difficulty": 3,
+    "mainStats": ["agi", "luk"],
+    "weapons": ["단검", "표창", "갈고리"],
+    "concept": "전투보다 '이득'. 훔치고, 열고, 함정을 놓는다",
+    "growth": { "agi": 3, "luk": 3, "str": 1 },
+    "parryWindowMs": 180,
+    "skills": [
+      "sk_rg_pickpocket",
+      "sk_rg_lockpick",
+      "sk_rg_trap",
+      "sk_rg_grapple",
+      "sk_rg_thiefs_eye",
+      "sk_rg_perfect_crime"
+    ],
+    "branches": [
+      {
+        "id": "treasure_hunter",
+        "name": "보물 사냥꾼",
+        "level": 20,
+        "parent": null,
+        "description": "파밍·탐색 특화. 히든 지역 발견률 대폭 증가"
+      },
+      {
+        "id": "trickster",
+        "name": "협잡꾼",
+        "level": 20,
+        "parent": null,
+        "description": "전투 유틸 특화. 함정·속박으로 파티 서포트"
+      },
+      {
+        "id": "relic_appraiser",
+        "name": "유물 감정가",
+        "level": 40,
+        "parent": "treasure_hunter",
+        "description": "희귀 등급 상향 확률"
+      },
+      {
+        "id": "labyrinth_walker",
+        "name": "미궁 답파자",
+        "level": 40,
+        "parent": "treasure_hunter",
+        "description": "던전 보너스 상자"
+      },
+      {
+        "id": "black_market",
+        "name": "암시장 거래인",
+        "level": 40,
+        "parent": "trickster",
+        "description": "파티 전체 골드 획득 증가"
+      },
+      {
+        "id": "trap_king",
+        "name": "덫의 왕",
+        "level": 40,
+        "parent": "trickster",
+        "description": "함정 6개까지 설치"
+      }
+    ]
+  },
+  {
+    "id": "lancer",
+    "name": "창술사",
+    "roles": ["DPS", "TANK"],
+    "difficulty": 3,
+    "mainStats": ["str", "agi"],
+    "weapons": ["장창", "미늘창"],
+    "concept": "거리를 지배한다. 근접인데 안 닿는 거리에서 때린다",
+    "growth": { "str": 3, "agi": 2, "vit": 2 },
+    "parryWindowMs": 200,
+    "skills": [
+      "sk_ln_pierce",
+      "sk_ln_sweep",
+      "sk_ln_check_stance",
+      "sk_ln_leap_strike",
+      "sk_ln_spacing",
+      "sk_ln_skyfall"
+    ],
+    "branches": [
+      {
+        "id": "dragon_lancer",
+        "name": "용창병",
+        "level": 20,
+        "parent": null,
+        "description": "도약·돌진 특화. 기동형 딜러"
+      },
+      {
+        "id": "wall_lancer",
+        "name": "성벽창",
+        "level": 20,
+        "parent": null,
+        "description": "견제 자세 특화. 라인 유지형 반탱커"
+      },
+      {
+        "id": "sky_cleaver",
+        "name": "하늘가르기",
+        "level": 40,
+        "parent": "dragon_lancer",
+        "description": "공중 콤보"
+      },
+      {
+        "id": "storm_spear",
+        "name": "폭풍의 창",
+        "level": 40,
+        "parent": "dragon_lancer",
+        "description": "연속 돌진"
+      },
+      {
+        "id": "immovable_formation",
+        "name": "불침의 진",
+        "level": 40,
+        "parent": "wall_lancer",
+        "description": "파티 보호벽 생성"
+      },
+      {
+        "id": "riposte_avatar",
+        "name": "반격의 화신",
+        "level": 40,
+        "parent": "wall_lancer",
+        "description": "반격 데미지 극대화"
+      }
+    ]
+  },
+  {
+    "id": "hexer",
+    "name": "디버퍼",
+    "roles": ["CONTROL", "SUPPORT"],
+    "difficulty": 4,
+    "mainStats": ["int", "wil"],
+    "weapons": ["저주인형", "사슬", "부적"],
+    "concept": "직접 때리지 않는다. 적을 약하게 만들어 파티가 죽이게 한다",
+    "growth": { "int": 3, "wil": 3, "vit": 1 },
+    "parryWindowMs": 130,
+    "soloNote": "자체 소환수 '저주받은 그림자' 1기를 상시 유지 → 혼자서도 사냥 가능",
+    "skills": [
+      "sk_hx_weakness_seal",
+      "sk_hx_rift_brand",
+      "sk_hx_silence_chain",
+      "sk_hx_cursed_shadow",
+      "sk_hx_pain_transfer",
+      "sk_hx_all_curse"
+    ],
+    "branches": [
+      {
+        "id": "doomcaster",
+        "name": "파멸술사",
+        "level": 20,
+        "parent": null,
+        "description": "취약·증뎀 특화. 레이드 필수 서포터"
+      },
+      {
+        "id": "binder",
+        "name": "속박술사",
+        "level": 20,
+        "parent": null,
+        "description": "군중 제어 특화. 던전 다수전 최강"
+      },
+      {
+        "id": "apocalypse_sigil",
+        "name": "종말의 각인",
+        "level": 40,
+        "parent": "doomcaster",
+        "description": "증뎀 25%까지"
+      },
+      {
+        "id": "curse_harvester",
+        "name": "저주 수확자",
+        "level": 40,
+        "parent": "doomcaster",
+        "description": "디버프 폭발 딜"
+      },
+      {
+        "id": "puppeteer",
+        "name": "인형 조종사",
+        "level": 40,
+        "parent": "binder",
+        "description": "적 1기 30초 매혹"
+      },
+      {
+        "id": "chain_prison",
+        "name": "사슬 감옥",
+        "level": 40,
+        "parent": "binder",
+        "description": "광역 완전 속박"
+      }
+    ]
+  },
+  {
+    "id": "cantor",
+    "name": "버퍼",
+    "roles": ["SUPPORT"],
+    "difficulty": 2,
+    "mainStats": ["wil", "int"],
+    "weapons": ["악기", "성구"],
+    "concept": "파티 전체의 성능을 20~40% 끌어올린다. 있으면 클리어, 없으면 전멸",
+    "growth": { "wil": 4, "int": 2, "vit": 1 },
+    "parryWindowMs": 140,
+    "soloNote": "자기 버프 8중첩 시 '독주' 상태 → 공격력 대폭 상승",
+    "skills": [
+      "sk_ct_march",
+      "sk_ct_valor_hymn",
+      "sk_ct_guardian_chant",
+      "sk_ct_mana_melody",
+      "sk_ct_encourage",
+      "sk_ct_encore",
+      "sk_ct_harmony",
+      "sk_ct_heroic_epic"
+    ],
+    "branches": [
+      {
+        "id": "battle_conductor",
+        "name": "전장의 지휘자",
+        "level": 20,
+        "parent": null,
+        "description": "공격 버프 특화. 딜 극대화 파티용"
+      },
+      {
+        "id": "guardian_choir",
+        "name": "수호의 성가대",
+        "level": 20,
+        "parent": null,
+        "description": "방어·생존 버프 특화. 고난도 레이드용"
+      },
+      {
+        "id": "triumph",
+        "name": "승전보",
+        "level": 40,
+        "parent": "battle_conductor",
+        "description": "처치 시 파티 버프 갱신"
+      },
+      {
+        "id": "frenzy_movement",
+        "name": "광란의 악장",
+        "level": 40,
+        "parent": "battle_conductor",
+        "description": "버프 대신 폭주 상태 부여"
+      },
+      {
+        "id": "immortal_chorus",
+        "name": "불멸의 합창",
+        "level": 40,
+        "parent": "guardian_choir",
+        "description": "파티 전체 1회 사망 무효"
+      },
+      {
+        "id": "purifying_bell",
+        "name": "정화의 종",
+        "level": 40,
+        "parent": "guardian_choir",
+        "description": "모든 디버프 즉시 해제"
+      }
+    ]
+  },
+  {
+    "id": "priest",
+    "name": "힐러",
+    "roles": ["HEAL"],
+    "difficulty": 3,
+    "mainStats": ["wil", "int"],
+    "weapons": ["성표", "지팡이", "성서"],
+    "concept": "죽음을 되돌린다. 파티의 마지막 방어선",
+    "growth": { "wil": 4, "int": 2, "vit": 1 },
+    "parryWindowMs": 130,
+    "soloNote": "'신벌' 계열 공격 스킬 보유. 언데드·마족 상대로는 최상위 딜러",
+    "skills": [
+      "sk_pr_healing_light",
+      "sk_pr_life_ripple",
+      "sk_pr_barrier",
+      "sk_pr_purify",
+      "sk_pr_smite",
+      "sk_pr_resurrect",
+      "sk_pr_oracle",
+      "sk_pr_dawn_miracle"
+    ],
+    "branches": [
+      {
+        "id": "radiant_priest",
+        "name": "성광사제",
+        "level": 20,
+        "parent": null,
+        "description": "순간 회복량·즉시 회복 특화. 즉발 대응형"
+      },
+      {
+        "id": "warding_priest",
+        "name": "수호사제",
+        "level": 20,
+        "parent": null,
+        "description": "실드·예방 특화. 피해를 미리 막는 형태"
+      },
+      {
+        "id": "hand_of_miracle",
+        "name": "기적의 손",
+        "level": 40,
+        "parent": "radiant_priest",
+        "description": "부활 쿨 2분"
+      },
+      {
+        "id": "light_judge",
+        "name": "빛의 심판자",
+        "level": 40,
+        "parent": "radiant_priest",
+        "description": "딜힐 하이브리드"
+      },
+      {
+        "id": "immortal_ward",
+        "name": "불멸의 결계",
+        "level": 40,
+        "parent": "warding_priest",
+        "description": "파티 전체 광역 실드"
+      },
+      {
+        "id": "causality_reversal",
+        "name": "인과 역전",
+        "level": 40,
+        "parent": "warding_priest",
+        "description": "받은 피해를 5초 뒤 회복으로"
+      }
+    ]
+  },
+  {
+    "id": "archer",
+    "name": "궁수",
+    "roles": ["DPS"],
+    "difficulty": 2,
+    "mainStats": ["agi", "str"],
+    "weapons": ["장궁", "석궁", "단궁"],
+    "concept": "안전거리에서 꾸준히. 가장 안정적인 원거리 딜러",
+    "growth": { "agi": 4, "str": 2, "luk": 1 },
+    "parryWindowMs": 150,
+    "skills": [
+      "sk_ar_aimed_shot",
+      "sk_ar_rapid_fire",
+      "sk_ar_arrow_rain",
+      "sk_ar_retreat_shot",
+      "sk_ar_hawk_eye",
+      "sk_ar_hunters_sense",
+      "sk_ar_piercing_shot"
+    ],
+    "branches": [
+      {
+        "id": "sniper",
+        "name": "저격수",
+        "level": 20,
+        "parent": null,
+        "description": "단일 극딜. 사거리·치명타 특화"
+      },
+      {
+        "id": "ranger",
+        "name": "수렵사",
+        "level": 20,
+        "parent": null,
+        "description": "야수 동료 소환 + 함정. 다수전과 솔로에 강함"
+      },
+      {
+        "id": "one_shot_art",
+        "name": "한 발의 미학",
+        "level": 40,
+        "parent": "sniper",
+        "description": "초장거리 초고배율"
+      },
+      {
+        "id": "chain_snipe",
+        "name": "연쇄 저격",
+        "level": 40,
+        "parent": "sniper",
+        "description": "처치 시 즉시 재사용"
+      },
+      {
+        "id": "beast_lord",
+        "name": "군주의 야수",
+        "level": 40,
+        "parent": "ranger",
+        "description": "동료 2기"
+      },
+      {
+        "id": "hunting_architect",
+        "name": "사냥터 설계자",
+        "level": 40,
+        "parent": "ranger",
+        "description": "지역 지배형 함정망"
+      }
+    ]
+  },
+  {
+    "id": "alchemist",
+    "name": "연금술사",
+    "roles": ["DPS", "SUPPORT"],
+    "difficulty": 5,
+    "mainStats": ["int", "luk"],
+    "weapons": ["플라스크", "기계 팔", "촉매"],
+    "concept": "자원 관리형. 시약을 조합해 상황마다 다른 답을 낸다",
+    "growth": { "int": 3, "luk": 3, "wil": 1 },
+    "parryWindowMs": 140,
+    "skills": [
+      "sk_al_extract",
+      "sk_al_throw_mix",
+      "sk_al_homunculus",
+      "sk_al_mutation",
+      "sk_al_recycle",
+      "sk_al_sage_experiment"
+    ],
+    "branches": [
+      {
+        "id": "detonator",
+        "name": "폭발화학자",
+        "level": 20,
+        "parent": null,
+        "description": "공격 조합 특화. 최상위 광역 딜러"
+      },
+      {
+        "id": "biotech",
+        "name": "생명공학자",
+        "level": 20,
+        "parent": null,
+        "description": "호문쿨루스·회복 특화. 소환형 서포터"
+      },
+      {
+        "id": "chain_reaction",
+        "name": "연쇄 반응",
+        "level": 40,
+        "parent": "detonator",
+        "description": "조합끼리 연쇄 폭발"
+      },
+      {
+        "id": "unstable_matter",
+        "name": "불안정 물질",
+        "level": 40,
+        "parent": "detonator",
+        "description": "고위험 고배율"
+      },
+      {
+        "id": "swarm_creation",
+        "name": "군체 창조",
+        "level": 40,
+        "parent": "biotech",
+        "description": "호문쿨루스 3기"
+      },
+      {
+        "id": "perfect_life",
+        "name": "완전한 생명",
+        "level": 40,
+        "parent": "biotech",
+        "description": "호문쿨루스가 부활 스킬 보유"
+      }
+    ]
+  }
+]

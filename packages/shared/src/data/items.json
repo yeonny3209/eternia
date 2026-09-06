@@ -1,0 +1,882 @@
+[
+  {
+    "id": "item_old_sword",
+    "name": "낡은 검",
+    "slot": "MAIN_HAND",
+    "weaponType": "SWORD",
+    "rarity": "COMMON",
+    "levelReq": 1,
+    "baseStats": {
+      "atk": [
+        8,
+        12
+      ]
+    },
+    "affixSlots": 0,
+    "affixPool": "pool_weapon_physical",
+    "setId": null,
+    "uniqueEffects": [],
+    "sockets": 0,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_apprentice_armor",
+    "name": "견습 방어구",
+    "slot": "CHEST",
+    "rarity": "COMMON",
+    "levelReq": 1,
+    "baseStats": {
+      "def": [
+        6,
+        10
+      ],
+      "vit": [
+        1,
+        2
+      ]
+    },
+    "affixSlots": 0,
+    "affixPool": "pool_armor",
+    "setId": null,
+    "uniqueEffects": [],
+    "sockets": 0,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_leather_armor",
+    "name": "가죽 갑옷",
+    "slot": "CHEST",
+    "rarity": "UNCOMMON",
+    "levelReq": 7,
+    "baseStats": {
+      "def": [
+        18,
+        26
+      ],
+      "vit": [
+        3,
+        6
+      ]
+    },
+    "affixSlots": 2,
+    "affixPool": "pool_armor",
+    "setId": null,
+    "uniqueEffects": [],
+    "sockets": 1,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_hunter_bow",
+    "name": "사냥꾼의 활",
+    "slot": "MAIN_HAND",
+    "weaponType": "BOW",
+    "rarity": "UNCOMMON",
+    "levelReq": 8,
+    "baseStats": {
+      "atk": [
+        26,
+        34
+      ],
+      "agi": [
+        2,
+        5
+      ]
+    },
+    "affixSlots": 2,
+    "affixPool": "pool_weapon_physical",
+    "setId": null,
+    "uniqueEffects": [],
+    "sockets": 1,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_ravine_greatsword",
+    "name": "협곡의 대검",
+    "slot": "MAIN_HAND",
+    "weaponType": "GREATSWORD",
+    "rarity": "RARE",
+    "levelReq": 18,
+    "baseStats": {
+      "atk": [
+        120,
+        145
+      ],
+      "str": [
+        8,
+        14
+      ]
+    },
+    "affixSlots": 4,
+    "affixPool": "pool_weapon_physical",
+    "setId": null,
+    "uniqueEffects": [],
+    "sockets": 2,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_riftwarden_blade",
+    "name": "균열 감시자의 검",
+    "slot": "MAIN_HAND",
+    "weaponType": "SWORD",
+    "rarity": "EPIC",
+    "levelReq": 32,
+    "baseStats": {
+      "atk": [
+        240,
+        290
+      ],
+      "str": [
+        16,
+        24
+      ]
+    },
+    "affixSlots": 4,
+    "affixPool": "pool_weapon_physical",
+    "setId": "set_riftwarden",
+    "uniqueEffects": [
+      "패리 성공 시 3초간 자세 피해 +50%"
+    ],
+    "sockets": 2,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_riftwarden_helm",
+    "name": "균열 감시자의 투구",
+    "slot": "HELM",
+    "rarity": "EPIC",
+    "levelReq": 32,
+    "baseStats": {
+      "def": [
+        88,
+        110
+      ],
+      "vit": [
+        10,
+        16
+      ]
+    },
+    "affixSlots": 4,
+    "affixPool": "pool_armor",
+    "setId": "set_riftwarden",
+    "uniqueEffects": [],
+    "sockets": 1,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_riftwarden_chest",
+    "name": "균열 감시자의 갑옷",
+    "slot": "CHEST",
+    "rarity": "EPIC",
+    "levelReq": 32,
+    "baseStats": {
+      "def": [
+        130,
+        160
+      ],
+      "vit": [
+        14,
+        22
+      ]
+    },
+    "affixSlots": 4,
+    "affixPool": "pool_armor",
+    "setId": "set_riftwarden",
+    "uniqueEffects": [],
+    "sockets": 2,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_riftwarden_gloves",
+    "name": "균열 감시자의 장갑",
+    "slot": "GLOVES",
+    "rarity": "EPIC",
+    "levelReq": 32,
+    "baseStats": {
+      "def": [
+        64,
+        82
+      ],
+      "agi": [
+        8,
+        14
+      ]
+    },
+    "affixSlots": 4,
+    "affixPool": "pool_armor",
+    "setId": "set_riftwarden",
+    "uniqueEffects": [],
+    "sockets": 1,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_afterimage_boots",
+    "name": "무한의 잔상 신발",
+    "slot": "BOOTS",
+    "rarity": "LEGENDARY",
+    "levelReq": 46,
+    "baseStats": {
+      "def": [
+        150,
+        190
+      ],
+      "agi": [
+        26,
+        38
+      ]
+    },
+    "affixSlots": 5,
+    "affixPool": "pool_armor",
+    "setId": "set_endless_afterimage",
+    "uniqueEffects": [
+      "회피 구르기가 잔상을 남긴다",
+      "잔상이 마지막으로 쓴 스킬을 복제 시전한다"
+    ],
+    "sockets": 2,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_afterimage_helm",
+    "name": "무한의 잔상 투구",
+    "slot": "HELM",
+    "rarity": "LEGENDARY",
+    "levelReq": 46,
+    "baseStats": {
+      "def": [
+        120,
+        150
+      ],
+      "agi": [
+        20,
+        30
+      ]
+    },
+    "affixSlots": 5,
+    "affixPool": "pool_armor",
+    "setId": "set_endless_afterimage",
+    "uniqueEffects": [],
+    "sockets": 1,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_afterimage_shoulder",
+    "name": "무한의 잔상 어깨",
+    "slot": "SHOULDER",
+    "rarity": "LEGENDARY",
+    "levelReq": 46,
+    "baseStats": {
+      "def": [
+        130,
+        165
+      ],
+      "agi": [
+        18,
+        26
+      ]
+    },
+    "affixSlots": 5,
+    "affixPool": "pool_armor",
+    "setId": "set_endless_afterimage",
+    "uniqueEffects": [],
+    "sockets": 1,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_afterimage_chest",
+    "name": "무한의 잔상 갑옷",
+    "slot": "CHEST",
+    "rarity": "LEGENDARY",
+    "levelReq": 46,
+    "baseStats": {
+      "def": [
+        210,
+        260
+      ],
+      "agi": [
+        24,
+        34
+      ],
+      "vit": [
+        18,
+        26
+      ]
+    },
+    "affixSlots": 5,
+    "affixPool": "pool_armor",
+    "setId": "set_endless_afterimage",
+    "uniqueEffects": [],
+    "sockets": 2,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_afterimage_gloves",
+    "name": "무한의 잔상 장갑",
+    "slot": "GLOVES",
+    "rarity": "LEGENDARY",
+    "levelReq": 46,
+    "baseStats": {
+      "def": [
+        110,
+        140
+      ],
+      "agi": [
+        26,
+        36
+      ]
+    },
+    "affixSlots": 5,
+    "affixPool": "pool_armor",
+    "setId": "set_endless_afterimage",
+    "uniqueEffects": [],
+    "sockets": 2,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_afterimage_belt",
+    "name": "무한의 잔상 벨트",
+    "slot": "BELT",
+    "rarity": "LEGENDARY",
+    "levelReq": 46,
+    "baseStats": {
+      "def": [
+        95,
+        125
+      ],
+      "agi": [
+        18,
+        26
+      ]
+    },
+    "affixSlots": 5,
+    "affixPool": "pool_armor",
+    "setId": "set_endless_afterimage",
+    "uniqueEffects": [],
+    "sockets": 1,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_pillar_breaker",
+    "name": "기둥을 꺾는 것",
+    "slot": "MAIN_HAND",
+    "weaponType": "GREATSWORD",
+    "rarity": "MYTHIC",
+    "levelReq": 50,
+    "baseStats": {
+      "atk": [
+        640,
+        720
+      ],
+      "str": [
+        45,
+        60
+      ]
+    },
+    "affixSlots": 6,
+    "affixPool": "pool_weapon_physical",
+    "setId": null,
+    "uniqueEffects": [
+      "그로기 상태의 적을 처형하면 주변에 균열 폭발",
+      "자세 피해 +80%",
+      "여섯 기둥의 속성 중 하나를 선택해 부여"
+    ],
+    "sockets": 3,
+    "tradable": false,
+    "handcrafted": true
+  },
+  {
+    "id": "item_star_cleaver",
+    "name": "별을 가르는 것",
+    "slot": "MAIN_HAND",
+    "weaponType": "SWORD",
+    "rarity": "MYTHIC",
+    "levelReq": 50,
+    "baseStats": {
+      "atk": [
+        600,
+        690
+      ],
+      "agi": [
+        40,
+        55
+      ],
+      "luk": [
+        20,
+        30
+      ]
+    },
+    "affixSlots": 6,
+    "affixPool": "pool_weapon_physical",
+    "setId": null,
+    "uniqueEffects": [
+      "기본 공격이 별빛 궤적을 남긴다",
+      "치명타 시 쿨타임 0.5초 감소",
+      "심야에 모든 피해 +15%"
+    ],
+    "sockets": 3,
+    "tradable": false,
+    "handcrafted": true
+  },
+  {
+    "id": "item_stopped_clock",
+    "name": "멈춘 시계",
+    "slot": "RING_1",
+    "rarity": "MYTHIC",
+    "levelReq": 50,
+    "baseStats": {
+      "wil": [
+        30,
+        42
+      ],
+      "int": [
+        30,
+        42
+      ]
+    },
+    "affixSlots": 6,
+    "affixPool": "pool_accessory",
+    "setId": null,
+    "uniqueEffects": [
+      "치명적 피해를 받으면 3초 전 상태로 되돌아간다 (5분 쿨)",
+      "스킬 쿨타임 -12%",
+      "뒤틀린 시간의 방에서 층 이동 시 HP 완전 회복"
+    ],
+    "sockets": 3,
+    "tradable": false,
+    "handcrafted": true
+  },
+  {
+    "id": "item_seal_of_the_dead",
+    "name": "망자의 인장",
+    "slot": "NECKLACE",
+    "rarity": "MYTHIC",
+    "levelReq": 50,
+    "baseStats": {
+      "wil": [
+        34,
+        46
+      ],
+      "vit": [
+        24,
+        36
+      ]
+    },
+    "affixSlots": 6,
+    "affixPool": "pool_accessory",
+    "setId": null,
+    "uniqueEffects": [
+      "사망 시 10초간 유령 상태로 계속 싸운다",
+      "언데드에게 주는 피해 +25%",
+      "부활 쿨타임 -30%"
+    ],
+    "sockets": 3,
+    "tradable": false,
+    "handcrafted": true
+  },
+  {
+    "id": "item_lung_of_mur",
+    "name": "무르의 폐",
+    "slot": "CHEST",
+    "rarity": "MYTHIC",
+    "levelReq": 50,
+    "baseStats": {
+      "def": [
+        420,
+        500
+      ],
+      "vit": [
+        40,
+        55
+      ],
+      "wil": [
+        26,
+        38
+      ]
+    },
+    "affixSlots": 6,
+    "affixPool": "pool_armor",
+    "setId": null,
+    "uniqueEffects": [
+      "산소 게이지가 소모되지 않는다",
+      "물 속성 피해 -40%",
+      "수중에서 이동속도 +50%"
+    ],
+    "sockets": 3,
+    "tradable": false,
+    "handcrafted": true
+  },
+  {
+    "id": "item_world_carving_pickaxe",
+    "name": "세계를 깎는 곡괭이",
+    "slot": "MAIN_HAND",
+    "weaponType": "GREATSWORD",
+    "rarity": "LEGENDARY",
+    "levelReq": 40,
+    "baseStats": {
+      "atk": [
+        380,
+        440
+      ],
+      "str": [
+        28,
+        40
+      ]
+    },
+    "affixSlots": 5,
+    "affixPool": "pool_weapon_physical",
+    "setId": null,
+    "uniqueEffects": [
+      "채광 속도 3배",
+      "광물 몬스터에게 주는 피해 +100%"
+    ],
+    "sockets": 2,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_emblem_guild",
+    "name": "에테르 조합 문장",
+    "slot": "EMBLEM",
+    "rarity": "EPIC",
+    "levelReq": 20,
+    "baseStats": {
+      "int": [
+        10,
+        16
+      ]
+    },
+    "affixSlots": 0,
+    "affixPool": "pool_accessory",
+    "setId": null,
+    "uniqueEffects": [
+      "조합 상점 가격 -10%"
+    ],
+    "sockets": 0,
+    "tradable": false,
+    "handcrafted": true
+  },
+  {
+    "id": "item_emblem_constellation",
+    "name": "은빛 성좌회 문장",
+    "slot": "EMBLEM",
+    "rarity": "EPIC",
+    "levelReq": 20,
+    "baseStats": {
+      "wil": [
+        10,
+        16
+      ]
+    },
+    "affixSlots": 0,
+    "affixPool": "pool_accessory",
+    "setId": null,
+    "uniqueEffects": [
+      "균열 몬스터에게 주는 피해 +8%"
+    ],
+    "sockets": 0,
+    "tradable": false,
+    "handcrafted": true
+  },
+  {
+    "id": "item_lesser_potion",
+    "name": "하급 물약",
+    "slot": "MAIN_HAND",
+    "rarity": "COMMON",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_consumable",
+    "setId": null,
+    "uniqueEffects": [
+      "HP 150 즉시 회복"
+    ],
+    "sockets": 0,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_return_stone",
+    "name": "귀환석",
+    "slot": "MAIN_HAND",
+    "rarity": "COMMON",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_consumable",
+    "setId": null,
+    "uniqueEffects": [
+      "가장 최근에 방문한 도시로 귀환"
+    ],
+    "sockets": 0,
+    "tradable": false,
+    "handcrafted": true
+  },
+  {
+    "id": "item_wolf_pelt",
+    "name": "늑대 가죽",
+    "slot": "MAIN_HAND",
+    "rarity": "COMMON",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [],
+    "sockets": 0,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_wolf_fang",
+    "name": "늑대 송곳니",
+    "slot": "MAIN_HAND",
+    "rarity": "COMMON",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [],
+    "sockets": 0,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_moonlight_herb",
+    "name": "달빛초",
+    "slot": "MAIN_HAND",
+    "rarity": "COMMON",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [],
+    "sockets": 0,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_enhance_stone",
+    "name": "강화석",
+    "slot": "MAIN_HAND",
+    "rarity": "UNCOMMON",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [
+      "장비 강화에 소모"
+    ],
+    "sockets": 0,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_reforge_stone",
+    "name": "재련석",
+    "slot": "MAIN_HAND",
+    "rarity": "RARE",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [
+      "영웅 이상 장비의 부옵션 리롤"
+    ],
+    "sockets": 0,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_protection_scroll",
+    "name": "보호권",
+    "slot": "MAIN_HAND",
+    "rarity": "EPIC",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [
+      "+16 이상 강화 실패 시 파괴를 방지"
+    ],
+    "sockets": 0,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_ether_crystal",
+    "name": "에테르 결정",
+    "slot": "MAIN_HAND",
+    "rarity": "RARE",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [
+      "균열 너머에서만 얻을 수 있는 자원"
+    ],
+    "sockets": 0,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_name_token",
+    "name": "이름의 증표",
+    "slot": "MAIN_HAND",
+    "rarity": "EPIC",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [
+      "닉네임 변경권 (무료 1회 소진 후 필요)"
+    ],
+    "sockets": 0,
+    "tradable": false,
+    "handcrafted": true
+  },
+  {
+    "id": "item_memory_water",
+    "name": "기억의 물",
+    "slot": "MAIN_HAND",
+    "rarity": "RARE",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [
+      "스탯 90레벨분 재분배"
+    ],
+    "sockets": 0,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_class_oath",
+    "name": "전직 서약서",
+    "slot": "MAIN_HAND",
+    "rarity": "EPIC",
+    "levelReq": 30,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [
+      "직업 1회 변경 (스킬 포인트 초기화)"
+    ],
+    "sockets": 0,
+    "tradable": false,
+    "handcrafted": true
+  },
+  {
+    "id": "item_rift_key",
+    "name": "던전 열쇠",
+    "slot": "MAIN_HAND",
+    "rarity": "UNCOMMON",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [
+      "던전 일일 입장에 소모"
+    ],
+    "sockets": 0,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_awaken_stone",
+    "name": "각성석",
+    "slot": "MAIN_HAND",
+    "rarity": "LEGENDARY",
+    "levelReq": 50,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [
+      "각성 등급 상승 재료"
+    ],
+    "sockets": 0,
+    "tradable": true,
+    "handcrafted": true
+  },
+  {
+    "id": "item_rift_sigil",
+    "name": "균열 표식",
+    "slot": "MAIN_HAND",
+    "rarity": "RARE",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [
+      "PvP 전용 화폐"
+    ],
+    "sockets": 0,
+    "tradable": false,
+    "handcrafted": true
+  },
+  {
+    "id": "item_shard_solar",
+    "name": "여명의 솔라 파편",
+    "slot": "EMBLEM",
+    "rarity": "MYTHIC",
+    "levelReq": 1,
+    "baseStats": {},
+    "affixSlots": 0,
+    "affixPool": "pool_material",
+    "setId": null,
+    "uniqueEffects": [
+      "여섯 기둥의 파편 1 / 빛"
+    ],
+    "sockets": 0,
+    "tradable": false,
+    "handcrafted": true
+  },
+  {
+    "id": "item_broken_sword_nameless",
+    "name": "부러진 검 '무명'",
+    "slot": "MAIN_HAND",
+    "weaponType": "SWORD",
+    "rarity": "LEGENDARY",
+    "levelReq": 45,
+    "baseStats": {
+      "atk": [
+        1,
+        1
+      ]
+    },
+    "affixSlots": 0,
+    "affixPool": "pool_weapon_physical",
+    "setId": null,
+    "uniqueEffects": [
+      "보른에게 재련하면 검성의 길이 열린다"
+    ],
+    "sockets": 0,
+    "tradable": false,
+    "handcrafted": true
+  }
+]

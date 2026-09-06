@@ -1,0 +1,158 @@
+[
+  {
+    "id": "MQ-1-01",
+    "type": "MAIN",
+    "title": "잿더미에서",
+    "map": "dawnhollow",
+    "level": 1,
+    "giver": "npc_elder_eladi",
+    "prerequisites": [],
+    "objectives": [
+      { "type": "REACH", "target": "poi_burning_carriage", "description": "불타는 마차 잔해 조사" },
+      { "type": "TALK", "target": "npc_elder_eladi", "description": "촌장 엘라디에게 보고" }
+    ],
+    "rewards": { "exp": 120, "gold": 100, "items": [["item_old_sword", 1]] },
+    "flags": { "repeatable": false, "shareable": false, "autoTrack": true },
+    "summary": "마차 습격을 조사하고 촌장에게 보고한다."
+  },
+  {
+    "id": "MQ-1-02",
+    "type": "MAIN",
+    "title": "이방인의 증언",
+    "map": "dawnhollow",
+    "level": 2,
+    "giver": "npc_elder_eladi",
+    "prerequisites": ["MQ-1-01"],
+    "objectives": [
+      { "type": "TALK", "target": "npc_coachman", "description": "유일한 생존자 마부와 대화" }
+    ],
+    "rewards": { "exp": 180, "gold": 120, "items": [["item_lesser_potion", 5]] },
+    "flags": { "repeatable": false, "shareable": false, "autoTrack": true },
+    "summary": "유일한 생존자인 마부를 찾아 습격의 정황을 듣는다."
+  },
+  {
+    "id": "SQ-DH-01",
+    "type": "SUB",
+    "title": "보른의 마지막 주문",
+    "map": "dawnhollow",
+    "level": 3,
+    "giver": "npc_smith_boron",
+    "prerequisites": ["MQ-1-01"],
+    "objectives": [
+      { "type": "COLLECT", "target": "item_wolf_fang", "count": 6 },
+      { "type": "TALK", "target": "npc_smith_boron" }
+    ],
+    "rewards": { "exp": 260, "gold": 200, "items": [["item_apprentice_armor", 1]] },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "은퇴하려는 대장장이의 마지막 검을 위한 재료를 모은다."
+  },
+  {
+    "id": "SQ-DH-02",
+    "type": "SUB",
+    "title": "티나의 외상 장부",
+    "map": "dawnhollow",
+    "level": 3,
+    "giver": "npc_merchant_tina",
+    "prerequisites": [],
+    "objectives": [
+      { "type": "TALK", "target": "npc_kid_run", "count": 1 },
+      {
+        "type": "CHOICE",
+        "target": "choice_tina_debt",
+        "choices": ["설득", "협박", "대납"],
+        "description": "외상값 회수 방식을 고른다"
+      }
+    ],
+    "rewards": { "exp": 220, "gold": 350 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "마을 사람 5명에게서 외상값을 회수한다. 설득·협박·대납 중 선택."
+  },
+  {
+    "id": "SQ-DH-03",
+    "type": "SUB",
+    "title": "룬이 잃어버린 것",
+    "map": "dawnhollow",
+    "level": 4,
+    "giver": "npc_kid_run",
+    "prerequisites": [],
+    "objectives": [
+      { "type": "REACH", "target": "poi_forest_edge" },
+      { "type": "KILL", "target": "mob_grey_wolf", "count": 4 },
+      { "type": "TALK", "target": "npc_kid_run" }
+    ],
+    "rewards": { "exp": 240, "gold": 150, "items": [["item_lesser_potion", 3]] },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "꼬마의 강아지를 찾는다. 숲에서 늑대에게 쫓기는 중이다."
+  },
+  {
+    "id": "SQ-DH-04",
+    "type": "SUB",
+    "title": "미레아의 기도",
+    "map": "dawnhollow",
+    "level": 4,
+    "giver": "npc_priest_mirea",
+    "prerequisites": [],
+    "objectives": [
+      { "type": "USE", "target": "poi_shrine_a" },
+      { "type": "USE", "target": "poi_shrine_b" },
+      { "type": "USE", "target": "poi_shrine_c" }
+    ],
+    "rewards": { "exp": 200, "gold": 120, "skillPoint": 1 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "마을 사당 3곳에 성수를 봉헌한다."
+  },
+  {
+    "id": "SQ-DH-05",
+    "type": "SUB",
+    "title": "마을의 밤",
+    "map": "dawnhollow",
+    "level": 5,
+    "giver": "npc_elder_eladi",
+    "prerequisites": ["SQ-DH-02"],
+    "objectives": [
+      { "type": "REACH", "target": "poi_night_alley", "description": "야간에만 진입 가능" },
+      {
+        "type": "CHOICE",
+        "target": "choice_refugee",
+        "choices": ["신고", "묵인", "식량 제공"],
+        "description": "도둑의 정체는 굶주린 난민이었다"
+      }
+    ],
+    "rewards": { "exp": 320, "gold": 180 },
+    "flags": { "repeatable": false, "shareable": false, "autoTrack": true },
+    "summary": "야간에만 나타나는 도둑을 추적한다. 실은 굶주린 난민이다."
+  },
+  {
+    "id": "DQ-DH-01",
+    "type": "DAILY",
+    "title": "마을 잡일",
+    "map": "dawnhollow",
+    "level": 1,
+    "giver": "npc_elder_eladi",
+    "prerequisites": [],
+    "objectives": [{ "type": "USE", "target": "poi_village_chore", "count": 3 }],
+    "rewards": { "exp": 150, "gold": 90, "items": [["item_enhance_stone", 1]] },
+    "flags": { "repeatable": true, "shareable": false, "autoTrack": true, "reset": "DAILY" },
+    "summary": "장작 패기 / 물 긷기 / 밭 매기 중 무작위."
+  },
+  {
+    "id": "HQ-DH-01",
+    "type": "HIDDEN",
+    "title": "우물 아래의 목소리",
+    "map": "dawnhollow",
+    "level": 1,
+    "giver": null,
+    "prerequisites": [],
+    "objectives": [
+      { "type": "USE", "target": "poi_village_well", "count": 3, "description": "코인을 3번 던진다" }
+    ],
+    "rewards": { "exp": 500, "gold": 0 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": false },
+    "hiddenTrigger": {
+      "kind": "TIME_OF_DAY",
+      "step": 1,
+      "params": { "hourStart": 3, "hourEnd": 4, "poi": "poi_village_well", "throws": 3 }
+    },
+    "summary": "마을 우물에 밤 3시에 코인을 3번 던지면 지하 통로가 열린다 → 뒤틀린 시간의 방."
+  }
+]

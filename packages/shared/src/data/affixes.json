@@ -1,0 +1,517 @@
+{
+  "$comment": "기획서 6-4-4. 접두사 8계열 x 6티어 = 48종 / 접미사 6계열 x 6티어 = 36종 / 전설 접사 20종. values 배열의 인덱스가 티어-1이다.",
+  "prefixes": [
+    {
+      "id": "px_attack",
+      "kind": "PREFIX",
+      "family": "ATTACK",
+      "name": "강타의",
+      "template": "공격력 +{v}",
+      "values": [
+        6,
+        14,
+        26,
+        44,
+        70,
+        108
+      ],
+      "effect": {
+        "stat": "atk",
+        "mode": "flat"
+      }
+    },
+    {
+      "id": "px_crit_rate",
+      "kind": "PREFIX",
+      "family": "CRIT",
+      "name": "예리한",
+      "template": "치명타 확률 +{v}%",
+      "values": [
+        1.2,
+        2.1,
+        3.2,
+        4.5,
+        6,
+        7.8
+      ],
+      "effect": {
+        "stat": "critRate",
+        "mode": "pct"
+      }
+    },
+    {
+      "id": "px_cooldown",
+      "kind": "PREFIX",
+      "family": "SPEED",
+      "name": "신속한",
+      "template": "스킬 쿨타임 -{v}%",
+      "values": [
+        1,
+        1.8,
+        2.8,
+        4,
+        5.4,
+        7
+      ],
+      "effect": {
+        "stat": "cooldown",
+        "mode": "pct"
+      }
+    },
+    {
+      "id": "px_hp",
+      "kind": "PREFIX",
+      "family": "SURVIVAL",
+      "name": "굳건한",
+      "template": "최대 HP +{v}",
+      "values": [
+        40,
+        95,
+        180,
+        300,
+        470,
+        700
+      ],
+      "effect": {
+        "stat": "hp",
+        "mode": "flat"
+      }
+    },
+    {
+      "id": "px_stamina",
+      "kind": "PREFIX",
+      "family": "RESOURCE",
+      "name": "지치지 않는",
+      "template": "스태미나 회복 +{v}%",
+      "values": [
+        2,
+        3.6,
+        5.5,
+        7.8,
+        10.5,
+        13.5
+      ],
+      "effect": {
+        "stat": "stamina",
+        "mode": "pct"
+      }
+    },
+    {
+      "id": "px_element",
+      "kind": "PREFIX",
+      "family": "ELEMENT",
+      "name": "원소의",
+      "template": "속성 피해 +{v}%",
+      "values": [
+        2.5,
+        4.5,
+        7,
+        10,
+        13.5,
+        17.5
+      ],
+      "effect": {
+        "stat": "elementDmg",
+        "mode": "pct"
+      }
+    },
+    {
+      "id": "px_penetration",
+      "kind": "PREFIX",
+      "family": "PENETRATION",
+      "name": "꿰뚫는",
+      "template": "방어 관통 +{v}%",
+      "values": [
+        1.5,
+        2.8,
+        4.4,
+        6.3,
+        8.5,
+        11
+      ],
+      "effect": {
+        "stat": "penetration",
+        "mode": "pct"
+      }
+    },
+    {
+      "id": "px_movespeed",
+      "kind": "PREFIX",
+      "family": "UTILITY",
+      "name": "바람의",
+      "template": "이동속도 +{v}%",
+      "values": [
+        1,
+        1.8,
+        2.7,
+        3.8,
+        5,
+        6.5
+      ],
+      "effect": {
+        "stat": "moveSpeed",
+        "mode": "pct"
+      }
+    }
+  ],
+  "suffixes": [
+    {
+      "id": "sx_low_hp_atk",
+      "kind": "SUFFIX",
+      "family": "CONDITIONAL",
+      "name": "궁지의",
+      "template": "HP 50% 이하일 때 공격력 +{v}%",
+      "values": [
+        6,
+        9,
+        12,
+        16,
+        20,
+        25
+      ],
+      "effect": {
+        "stat": "atk",
+        "mode": "pct",
+        "trigger": "LOW_HP",
+        "uptime": 0.22
+      }
+    },
+    {
+      "id": "sx_on_kill_speed",
+      "kind": "SUFFIX",
+      "family": "ON_KILL",
+      "name": "추격의",
+      "template": "적 처치 시 3초간 이동속도 +{v}%",
+      "values": [
+        10,
+        14,
+        18,
+        23,
+        28,
+        34
+      ],
+      "effect": {
+        "stat": "moveSpeed",
+        "mode": "pct",
+        "trigger": "ON_KILL",
+        "uptime": 0.35
+      }
+    },
+    {
+      "id": "sx_on_hit_shield",
+      "kind": "SUFFIX",
+      "family": "ON_HIT_TAKEN",
+      "name": "반석의",
+      "template": "피격 시 20% 확률로 보호막 생성 (흡수 {v})",
+      "values": [
+        60,
+        130,
+        240,
+        400,
+        620,
+        900
+      ],
+      "effect": {
+        "stat": "def",
+        "mode": "flat",
+        "trigger": "ON_HIT_TAKEN",
+        "uptime": 0.2
+      }
+    },
+    {
+      "id": "sx_on_dodge_crit",
+      "kind": "SUFFIX",
+      "family": "ON_DODGE",
+      "name": "잔상의",
+      "template": "회피 직후 1초간 다음 공격 확정 치명타 (치명타 피해 +{v}%)",
+      "values": [
+        8,
+        12,
+        17,
+        23,
+        30,
+        38
+      ],
+      "effect": {
+        "stat": "critDmg",
+        "mode": "pct",
+        "trigger": "ON_DODGE",
+        "uptime": 0.28
+      }
+    },
+    {
+      "id": "sx_on_parry_cdr",
+      "kind": "SUFFIX",
+      "family": "ON_PARRY",
+      "name": "반격의",
+      "template": "패리 성공 시 스킬 쿨타임 {v}초 감소",
+      "values": [
+        0.6,
+        1,
+        1.4,
+        1.8,
+        2.2,
+        2.8
+      ],
+      "effect": {
+        "stat": "cooldown",
+        "mode": "pct",
+        "trigger": "ON_PARRY",
+        "uptime": 0.15
+      }
+    },
+    {
+      "id": "sx_vs_groggy",
+      "kind": "SUFFIX",
+      "family": "ON_GROGGY",
+      "name": "처형의",
+      "template": "그로기 상태의 적에게 피해 +{v}%",
+      "values": [
+        5,
+        7.5,
+        10,
+        13,
+        16.5,
+        21
+      ],
+      "effect": {
+        "stat": "dmgIncrease",
+        "mode": "pct",
+        "trigger": "VS_GROGGY",
+        "uptime": 0.18
+      }
+    }
+  ],
+  "legendaries": [
+    {
+      "id": "lg_double_dodge",
+      "name": "무한의 잔상",
+      "template": "회피 구르기가 2회 연속 가능해지고, 회피 중 공격 가능",
+      "effect": {
+        "stat": "stamina",
+        "mode": "pct"
+      },
+      "value": 0.35,
+      "drawback": 1
+    },
+    {
+      "id": "lg_ult_cdr_tradeoff",
+      "name": "성급한 왕관",
+      "template": "궁극기 쿨타임 60% 감소, 대신 효과도 40% 감소",
+      "effect": {
+        "stat": "cooldown",
+        "mode": "pct"
+      },
+      "value": 0.6,
+      "drawback": 0.85
+    },
+    {
+      "id": "lg_no_skill_basic",
+      "name": "검성의 맹세",
+      "template": "스킬을 쓸 수 없게 되는 대신 기본 공격 피해 3배",
+      "effect": {
+        "stat": "atk",
+        "mode": "pct"
+      },
+      "value": 2,
+      "drawback": 0.5
+    },
+    {
+      "id": "lg_parry_window",
+      "name": "심안의 각인",
+      "template": "패리 판정 창 +0.1초, 패리 성공 시 3초간 공격력 +25%",
+      "effect": {
+        "stat": "atk",
+        "mode": "pct",
+        "trigger": "ON_PARRY",
+        "uptime": 0.3
+      },
+      "value": 0.25,
+      "drawback": 1
+    },
+    {
+      "id": "lg_groggy_extend",
+      "name": "붕괴의 낙인",
+      "template": "자세 붕괴 지속시간 +50%, 그로기 중 받는 피해 증가량 +20%",
+      "effect": {
+        "stat": "dmgIncrease",
+        "mode": "pct",
+        "trigger": "VS_GROGGY",
+        "uptime": 0.2
+      },
+      "value": 0.2,
+      "drawback": 1
+    },
+    {
+      "id": "lg_backstab",
+      "name": "그림자의 예법",
+      "template": "배후 공격 피해 +45%, 정면 공격 피해 -15%",
+      "effect": {
+        "stat": "dmgIncrease",
+        "mode": "pct"
+      },
+      "value": 0.18,
+      "drawback": 1
+    },
+    {
+      "id": "lg_projectile_split",
+      "name": "쪼개진 화살통",
+      "template": "투사체가 2개로 갈라지지만 각각의 피해가 60%로 감소",
+      "effect": {
+        "stat": "atk",
+        "mode": "pct"
+      },
+      "value": 0.2,
+      "drawback": 1
+    },
+    {
+      "id": "lg_stamina_to_atk",
+      "name": "숨을 태우는 자",
+      "template": "스태미나가 가득 찰수록 공격력 최대 +30%, 회복 속도 절반",
+      "effect": {
+        "stat": "atk",
+        "mode": "pct",
+        "uptime": 0.5
+      },
+      "value": 0.3,
+      "drawback": 0.9
+    },
+    {
+      "id": "lg_glass_cannon",
+      "name": "유리의 심장",
+      "template": "최대 HP -40%, 모든 피해 +35%",
+      "effect": {
+        "stat": "dmgIncrease",
+        "mode": "pct"
+      },
+      "value": 0.35,
+      "drawback": 1
+    },
+    {
+      "id": "lg_execute",
+      "name": "마지막 숨결",
+      "template": "HP 20% 이하 적에게 주는 피해 +60%",
+      "effect": {
+        "stat": "dmgIncrease",
+        "mode": "pct",
+        "uptime": 0.15
+      },
+      "value": 0.6,
+      "drawback": 1
+    },
+    {
+      "id": "lg_combo_finisher",
+      "name": "삼연의 검",
+      "template": "기본 공격 3타째가 광역이 되고 자세 피해 2배",
+      "effect": {
+        "stat": "atk",
+        "mode": "pct",
+        "uptime": 0.33
+      },
+      "value": 0.25,
+      "drawback": 1
+    },
+    {
+      "id": "lg_cd_on_crit",
+      "name": "찰나의 회로",
+      "template": "치명타 시 스킬 쿨타임 0.5초 감소 (1초당 1회)",
+      "effect": {
+        "stat": "cooldown",
+        "mode": "pct"
+      },
+      "value": 0.12,
+      "drawback": 1
+    },
+    {
+      "id": "lg_ground_bloom",
+      "name": "번지는 실험",
+      "template": "설치 장판의 반경 +50%, 지속 +3초",
+      "effect": {
+        "stat": "dmgIncrease",
+        "mode": "pct",
+        "uptime": 0.4
+      },
+      "value": 0.15,
+      "drawback": 1
+    },
+    {
+      "id": "lg_heal_to_shield",
+      "name": "역전된 자비",
+      "template": "받는 회복의 40%가 추가 보호막으로 전환",
+      "effect": {
+        "stat": "def",
+        "mode": "pct"
+      },
+      "value": 0.4,
+      "drawback": 1
+    },
+    {
+      "id": "lg_summon_echo",
+      "name": "군체의 서약",
+      "template": "소환수가 1기 늘어나지만 각각의 능력치 -25%",
+      "effect": {
+        "stat": "atk",
+        "mode": "pct"
+      },
+      "value": 0.15,
+      "drawback": 0.95
+    },
+    {
+      "id": "lg_ele_cycle",
+      "name": "원소의 순환",
+      "template": "다른 속성으로 연속 공격 시 피해 +12% 누적 (최대 3중첩)",
+      "effect": {
+        "stat": "elementDmg",
+        "mode": "pct",
+        "uptime": 0.6
+      },
+      "value": 0.36,
+      "drawback": 1
+    },
+    {
+      "id": "lg_root_punish",
+      "name": "사슬의 대가",
+      "template": "속박·빙결 상태의 적에게 주는 피해 +50%",
+      "effect": {
+        "stat": "dmgIncrease",
+        "mode": "pct",
+        "uptime": 0.2
+      },
+      "value": 0.5,
+      "drawback": 1
+    },
+    {
+      "id": "lg_last_stand",
+      "name": "불굴의 증명",
+      "template": "치명적인 피해를 받으면 3초간 HP 1로 버틴다 (60초 쿨)",
+      "effect": {
+        "stat": "hp",
+        "mode": "pct"
+      },
+      "value": 0.15,
+      "drawback": 1
+    },
+    {
+      "id": "lg_gold_rush",
+      "name": "도둑의 손버릇",
+      "template": "획득 골드 +80%, 아이템 발견 +30%",
+      "effect": {
+        "stat": "gold",
+        "mode": "pct"
+      },
+      "value": 0.8,
+      "drawback": 1
+    },
+    {
+      "id": "lg_ult_charge",
+      "name": "영웅의 서사",
+      "template": "기본 공격이 궁극기 게이지를 충전하고, 궁극기 지속 +25%",
+      "effect": {
+        "stat": "cooldown",
+        "mode": "pct"
+      },
+      "value": 0.25,
+      "drawback": 1
+    }
+  ]
+}

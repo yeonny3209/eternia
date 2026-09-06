@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # 기획서 2-3: "데이터 추가할 때마다 이 스크립트를 돌린다"
+      - name: 기획 데이터 무결성 검사
+        run: npm run validate:data
+
+      - name: 타입 검사
+        run: npm run typecheck
+
+      - name: 테스트
+        run: npm test
+
+      - name: 클라이언트 빌드
+        run: npm run build:client
+
+      # 생성물이 최신인지 확인 — items.generated.json이 뒤처지면 실패
+      - name: 아이템 생성물 최신 여부
+        run: |
+          npm run gen:items
+          git diff --exit-code packages/shared/src/data/items.generated.json
+
+      # 밸런스는 게이트가 아니라 관측기다. 로그에만 남긴다.
+      - name: 밸런스 관측 (실패하지 않음)
+        run: npm run sim:balance -- 20000
+        continue-on-error: true

@@ -1,0 +1,171 @@
+[
+  {
+    "id": "MQ-1-03",
+    "type": "MAIN",
+    "title": "숲을 지나",
+    "map": "whispering_woods",
+    "level": 5,
+    "giver": "npc_elder_eladi",
+    "prerequisites": ["MQ-1-02"],
+    "objectives": [
+      { "type": "REACH", "target": "poi_woods_trail" },
+      { "type": "KILL", "target": "mob_forest_spider", "count": 8 }
+    ],
+    "rewards": { "exp": 420, "gold": 220 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "습격자의 흔적을 따라 숲을 관통한다."
+  },
+  {
+    "id": "MQ-1-04",
+    "type": "MAIN",
+    "title": "그로트의 분노",
+    "map": "whispering_woods",
+    "level": 8,
+    "giver": "npc_hunter_boron",
+    "prerequisites": ["MQ-1-03"],
+    "objectives": [{ "type": "KILL", "target": "boss_grote", "count": 1 }],
+    "rewards": { "exp": 900, "gold": 500, "items": [["item_leather_armor", 1]], "skillPoint": 1 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "튜토리얼에서 의도적으로 패배한 거대 곰에게 파티로 재도전한다."
+  },
+  {
+    "id": "SQ-WW-01",
+    "type": "SUB",
+    "title": "사냥꾼 보론의 부탁",
+    "map": "whispering_woods",
+    "level": 5,
+    "giver": "npc_hunter_boron",
+    "prerequisites": [],
+    "objectives": [
+      { "type": "KILL", "target": "mob_grey_wolf", "count": 12 },
+      { "type": "TALK", "target": "npc_hunter_boron" }
+    ],
+    "rewards": { "exp": 300, "gold": 180, "items": [["item_wolf_pelt", 3]] },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "늑대 12마리를 처치한다."
+  },
+  {
+    "id": "SQ-WW-02",
+    "type": "SUB",
+    "title": "늑대는 왜 내려왔나",
+    "map": "whispering_woods",
+    "level": 7,
+    "giver": "npc_hunter_boron",
+    "prerequisites": ["SQ-WW-01"],
+    "objectives": [
+      { "type": "KILL", "target": "mob_grey_wolf", "count": 12 },
+      { "type": "COLLECT", "target": "item_wolf_fang", "count": 8 },
+      { "type": "REACH", "target": "poi_dried_spring" },
+      { "type": "TALK", "target": "npc_hunter_boron" }
+    ],
+    "rewards": { "exp": 1200, "gold": 350, "items": [["item_leather_armor", 1]], "skillPoint": 0 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "말라버린 샘을 조사한다. 균열이 지하수를 삼켰다."
+  },
+  {
+    "id": "SQ-WW-03",
+    "type": "SUB",
+    "title": "나무의 눈물",
+    "map": "whispering_woods",
+    "level": 8,
+    "giver": "npc_spirit_earth",
+    "prerequisites": [],
+    "objectives": [
+      { "type": "COLLECT", "target": "item_moonlight_herb", "count": 10 },
+      { "type": "CRAFT", "target": "item_lesser_potion", "count": 2 },
+      { "type": "USE", "target": "poi_sick_tree" }
+    ],
+    "rewards": { "exp": 520, "gold": 260 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "병든 고목을 치료한다. 연금술 재료 5종이 필요하다."
+  },
+  {
+    "id": "SQ-WW-04",
+    "type": "SUB",
+    "title": "버섯 감별사",
+    "map": "whispering_woods",
+    "level": 6,
+    "giver": "npc_hunter_boron",
+    "prerequisites": [],
+    "objectives": [
+      { "type": "KILL", "target": "mob_mushroom_soldier", "count": 6 },
+      {
+        "type": "CHOICE",
+        "target": "choice_mushroom",
+        "choices": ["독버섯", "식용버섯"],
+        "description": "감별 미니게임"
+      }
+    ],
+    "rewards": { "exp": 340, "gold": 200 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "독버섯과 식용버섯을 구분하는 미니게임."
+  },
+  {
+    "id": "SQ-WW-05",
+    "type": "SUB",
+    "title": "사라진 순찰대",
+    "map": "whispering_woods",
+    "level": 9,
+    "giver": "npc_elder_eladi",
+    "prerequisites": ["MQ-1-03"],
+    "objectives": [
+      { "type": "REACH", "target": "poi_patrol_camp" },
+      { "type": "ESCORT", "target": "npc_coachman", "count": 2 }
+    ],
+    "rewards": { "exp": 600, "gold": 320, "skillPoint": 1 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "실종된 병사 4명을 수색한다. 생존 2, 사망 2."
+  },
+  {
+    "id": "DQ-WW-01",
+    "type": "DAILY",
+    "title": "숲의 균형",
+    "map": "whispering_woods",
+    "level": 5,
+    "giver": "npc_hunter_boron",
+    "prerequisites": [],
+    "objectives": [{ "type": "KILL", "target": "mob_grey_wolf", "count": 40 }],
+    "rewards": { "exp": 400, "gold": 200, "items": [["item_enhance_stone", 2]] },
+    "flags": { "repeatable": true, "shareable": false, "autoTrack": true, "reset": "DAILY" },
+    "summary": "숲 몬스터 40마리 처치."
+  },
+  {
+    "id": "DQ-WW-02",
+    "type": "DAILY",
+    "title": "약초 채집",
+    "map": "whispering_woods",
+    "level": 5,
+    "giver": "npc_hunter_boron",
+    "prerequisites": [],
+    "objectives": [{ "type": "COLLECT", "target": "item_moonlight_herb", "count": 20 }],
+    "rewards": { "exp": 350, "gold": 180 },
+    "flags": { "repeatable": true, "shareable": false, "autoTrack": true, "reset": "DAILY" },
+    "summary": "달빛초 20개 채집."
+  },
+  {
+    "id": "HQ-WW-01",
+    "type": "HIDDEN",
+    "title": "네 정령의 시험",
+    "map": "whispering_woods",
+    "level": 10,
+    "giver": null,
+    "prerequisites": [],
+    "objectives": [
+      { "type": "TALK", "target": "npc_spirit_fire", "description": "제물 태우기" },
+      { "type": "TALK", "target": "npc_spirit_water", "description": "오염 정화" },
+      { "type": "TALK", "target": "npc_spirit_wind", "description": "경주 승리" },
+      { "type": "TALK", "target": "npc_spirit_earth", "description": "씨앗 100개 심기" }
+    ],
+    "rewards": { "exp": 1500, "gold": 0 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": false },
+    "hiddenTrigger": {
+      "kind": "NO_KILL_CLEAR",
+      "step": 1,
+      "params": {
+        "targets": ["npc_spirit_fire", "npc_spirit_water", "npc_spirit_wind", "npc_spirit_earth"]
+      }
+    },
+    "unlocksHiddenClass": "spiritshot",
+    "summary": "불·물·바람·대지 정령을 죽이지 않고 각각의 요구를 충족 → 정령사수 1단계."
+  }
+]

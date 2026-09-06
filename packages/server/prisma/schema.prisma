@@ -1,0 +1,211 @@
+// 기획서 15부 — 데이터 스키마.
+// PostgreSQL + Prisma (기획서 2-1).
+//
+//   npx prisma migrate dev --name init
+//
+// 히든 진행도는 별도 테이블에 두고 클라이언트에 절대 노출하지 않는다(기획서 9-3).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum QuestState {
+  AVAILABLE
+  ACTIVE
+  COMPLETE
+  TURNED_IN
+  LOCKED
+}
+
+model Account {
+  id           String      @id @default(uuid())
+  email        String      @unique
+  passwordHash String
+  characters   Character[]
+  createdAt    DateTime    @default(now())
+}
+
+model Character {
+  id       String @id @default(uuid())
+  account  Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String
+
+  /// 표시용 원문
+  nickname          String
+  /// 정규화 키 (소문자 + 혼동문자 치환). 전 서버 유일 — 기획서 4-2
+  nicknameKey       String    @unique
+  nicknameChangedAt DateTime?
+  /// 무료 변경 1회 사용 여부
+  nicknameFreeUsed  Boolean   @default(false)
+
+  /// 시작 배경 5종 — 기획서 4-3
+  background    String
+  /// 5레벨 전엔 null — 기획서 4-1
+  classId       String?
+  hiddenClassId String?
+
+  level       Int    @default(1)
+  exp         BigInt @default(0)
+  awakenRank  Int    @default(0)
+  awakenPoint BigInt @default(0)
+
+  /// {str,agi,int,vit,wil,luk}
+  stats       Json
+  freePoints  Int @default(0)
+  skillPoints Int @default(0)
+
+  mapId String @default("dawnhollow")
+  posX  Float  @default(0)
+  posY  Float  @default(0)
+  gold  BigInt @default(0)
+
+  /// ["seal","manage","restart"] — 기획서 9-4
+  endingSeen String[]
+
+  inventory      InventoryItem[]
+  equipment      Equipment[]
+  questProgress  QuestProgress[]
+  hiddenProgress HiddenProgress[]
+  skills         CharacterSkill[]
+  reputation     Reputation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([accountId])
+  @@index([level])
+}
+
+model QuestProgress {
+  id          String @id @default(uuid())
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  characterId String
+
+  questId String
+  state   QuestState
+  /// [{index:0, current:7, required:12}]
+  objectives Json
+  /// 분기 선택 기록
+  choiceMade  String?
+  completedAt DateTime?
+  /// 일일/주간용
+  resetAt     DateTime?
+
+  @@unique([characterId, questId])
+  @@index([characterId, state])
+}
+
+/// ★ 히든 퀘스트 진행도. 클라이언트에 절대 노출하지 않는다 (기획서 9-3)
+model HiddenProgress {
+  id          String @id @default(uuid())
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  characterId String
+
+  /// "HQ-FR-01"
+  hiddenId String
+  step     Int    @default(0)
+  /// {noSkillBossKills:2, visitCount:1, lastVisitAt:"..."}
+  counters Json
+  unlockedAt DateTime?
+
+  @@unique([characterId, hiddenId])
+}
+
+model InventoryItem {
+  id          String @id @default(uuid())
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  characterId String
+
+  itemId    String
+  quantity  Int     @default(1)
+  enhanceLv Int     @default(0)
+  /// 굴려진 기본 스탯
+  rolledStats Json?
+  /// 부옵션(접사) 줄 — 기획서 6-4-4
+  reforge   Json?
+  /// 소켓에 박힌 보석 id 배열
+  sockets   Json?
+  bound     Boolean @default(false)
+  slotIndex Int
+
+  @@index([characterId])
+}
+
+/// 16슬롯 장착 상태 — 기획서 6-4-1
+model Equipment {
+  id          String @id @default(uuid())
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  characterId String
+
+  /// EquipSlot 값 ("MAIN_HAND" 등)
+  slot            String
+  inventoryItemId String?
+  /// 무기 스왑 세트 번호 (1 또는 2) — 기획서 6-4-1
+  weaponSet       Int     @default(1)
+
+  @@unique([characterId, slot, weaponSet])
+}
+
+model CharacterSkill {
+  id          String @id @default(uuid())
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  characterId String
+
+  skillId String
+  level   Int    @default(1)
+  /// 8칸 스킬 슬롯 중 어디에 넣었는가. null이면 미장착
+  hotbarIndex Int?
+
+  @@unique([characterId, skillId])
+}
+
+model Reputation {
+  id          String @id @default(uuid())
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  characterId String
+
+  /// silver_constellation | aether_guild | nameless_children
+  faction String
+  value   Int    @default(0)
+
+  @@unique([characterId, faction])
+}
+
+model Party {
+  id        String   @id @default(uuid())
+  leaderId  String
+  memberIds String[]
+  /// FREE | ROUND_ROBIN | ROLL | LEADER
+  lootMode  String   @default("ROLL")
+  createdAt DateTime @default(now())
+}
+
+model InstanceRun {
+  id         String @id @default(uuid())
+  /// "D-21" / "R-25"
+  contentId  String
+  difficulty String
+  memberIds  String[]
+  clearedAt   DateTime?
+  clearTimeMs Int?
+  /// 무한 던전용 도달 층수
+  floor       Int?
+  createdAt   DateTime @default(now())
+
+  @@index([contentId, clearTimeMs])
+}
+
+/// 이전 닉네임 30일 예약 보존 — 기획서 4-2
+model NicknameReservation {
+  id          String   @id @default(uuid())
+  nicknameKey String   @unique
+  characterId String
+  releasedAt  DateTime
+
+  @@index([releasedAt])
+}

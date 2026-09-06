@@ -1,0 +1,809 @@
+[
+  {
+    "id": "sk_hd_formless",
+    "name": "무형",
+    "classId": "sword_saint",
+    "kind": "PASSIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 0,
+      "activeMs": 0,
+      "recoveryMs": 0
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 0,
+    "mpCost": 0,
+    "element": "NONE",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "스킬 미사용 시간이 길수록 기본 공격 데미지 최대 +300%. PvP에서는 스택 최대 +120%로 제한",
+    "pvpOverride": {
+      "executeThreshold": 1.2
+    }
+  },
+  {
+    "id": "sk_hd_single_cut",
+    "name": "일도양단",
+    "classId": "sword_saint",
+    "kind": "ACTIVE",
+    "coef": {
+      "pve": 9,
+      "pvp": 3.6
+    },
+    "frames": {
+      "startupMs": 700,
+      "activeMs": 120,
+      "recoveryMs": 800,
+      "cancelable": false
+    },
+    "hitbox": {
+      "type": "LINE",
+      "length": 6,
+      "width": 1.4,
+      "pierce": 0
+    },
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 50000,
+    "mpCost": 0,
+    "element": "NONE",
+    "poiseDamage": 60,
+    "movable": false,
+    "description": "기본 공격 100회 누적 시 1회 발동 가능한 확정 즉사급 일격. 보스는 HP 12%"
+  },
+  {
+    "id": "sk_hd_mind_eye",
+    "name": "심안",
+    "classId": "sword_saint",
+    "kind": "PASSIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 0,
+      "activeMs": 0,
+      "recoveryMs": 0
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 0,
+    "mpCost": 0,
+    "element": "NONE",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "적의 다음 공격 방향이 화면에 표시됨. 완벽 회피 시 즉시 반격"
+  },
+  {
+    "id": "sk_hd_sword_unity",
+    "name": "검심일치",
+    "classId": "sword_saint",
+    "kind": "ULTIMATE",
+    "coef": {
+      "pve": 2.2,
+      "pvp": 1.1
+    },
+    "frames": {
+      "startupMs": 600,
+      "activeMs": 20000,
+      "recoveryMs": 700,
+      "cancelable": false
+    },
+    "hitbox": {
+      "type": "SECTOR",
+      "range": 4,
+      "angle": 180
+    },
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 180000,
+    "mpCost": 0,
+    "element": "NONE",
+    "poiseDamage": 25,
+    "movable": true,
+    "description": "20초간 모든 기본 공격이 광역화되고 쿨타임이 사라짐",
+    "pvpOverride": {
+      "ccDurationMs": 12000
+    }
+  },
+  {
+    "id": "sk_hd_void_erosion",
+    "name": "공허 잠식",
+    "classId": "voidcaller",
+    "kind": "ACTIVE",
+    "coef": {
+      "pve": 2,
+      "pvp": 1.05
+    },
+    "frames": {
+      "startupMs": 620,
+      "activeMs": 90,
+      "recoveryMs": 420,
+      "cancelable": false
+    },
+    "hitbox": {
+      "type": "CIRCLE",
+      "radius": 2.2,
+      "offset": 6
+    },
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 10000,
+    "mpCost": 30,
+    "element": "DARK",
+    "poiseDamage": 14,
+    "movable": false,
+    "description": "적에게 공허 낙인. 낙인된 적이 죽으면 주변에 소형 균열 생성 (연쇄)"
+  },
+  {
+    "id": "sk_hd_dimension_rift",
+    "name": "차원 균열",
+    "classId": "voidcaller",
+    "kind": "ACTIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 1400,
+      "activeMs": 100,
+      "recoveryMs": 700,
+      "cancelable": false
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 60000,
+    "mpCost": 50,
+    "element": "DARK",
+    "poiseDamage": 0,
+    "movable": false,
+    "description": "지정 두 지점을 연결하는 포탈. 파티 전체 이동 가능 (던전 기믹 파훼용)"
+  },
+  {
+    "id": "sk_hd_backflow",
+    "name": "역류",
+    "classId": "voidcaller",
+    "kind": "PASSIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 0,
+      "activeMs": 0,
+      "recoveryMs": 0
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 0,
+    "mpCost": 0,
+    "element": "DARK",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "받은 마법 피해를 100% 흡수해 다음 스킬 데미지로 전환"
+  },
+  {
+    "id": "sk_hd_domain_of_nothing",
+    "name": "무의 영역",
+    "classId": "voidcaller",
+    "kind": "ULTIMATE",
+    "coef": {
+      "pve": 1.5,
+      "pvp": 0.7
+    },
+    "frames": {
+      "startupMs": 1000,
+      "activeMs": 15000,
+      "recoveryMs": 800,
+      "cancelable": false
+    },
+    "hitbox": {
+      "type": "GROUND",
+      "radius": 8,
+      "durationMs": 15000,
+      "tickMs": 1000
+    },
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 200000,
+    "mpCost": 100,
+    "element": "DARK",
+    "poiseDamage": 10,
+    "movable": true,
+    "description": "15초간 영역 생성. 영역 내 적은 회복·소환·부활 불가. PvP에서는 5초, 쿨 3분",
+    "pvpOverride": {
+      "cooldownMs": 180000,
+      "ccDurationMs": 5000
+    }
+  },
+  {
+    "id": "sk_hd_moon_stealth",
+    "name": "월광 은신",
+    "classId": "moonshade",
+    "kind": "ACTIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 180,
+      "activeMs": 40,
+      "recoveryMs": 240,
+      "cancelable": true
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 22000,
+    "mpCost": 24,
+    "element": "DARK",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "은신 중 공격해도 은신이 풀리지 않음 (5초, 심야엔 10초). PvP에서는 첫 타격 시 해제",
+    "pvpOverride": {
+      "ccDurationMs": 0
+    }
+  },
+  {
+    "id": "sk_hd_shadow_leap",
+    "name": "그림자 도약",
+    "classId": "moonshade",
+    "kind": "ACTIVE",
+    "coef": {
+      "pve": 1.6,
+      "pvp": 0.85
+    },
+    "frames": {
+      "startupMs": 200,
+      "activeMs": 600,
+      "recoveryMs": 380,
+      "cancelable": false
+    },
+    "hitbox": {
+      "type": "DASH",
+      "distance": 9,
+      "width": 1.6
+    },
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 16000,
+    "mpCost": 30,
+    "element": "DARK",
+    "poiseDamage": 12,
+    "movable": true,
+    "description": "시야 내 모든 적 사이를 순간이동하며 연속 타격"
+  },
+  {
+    "id": "sk_hd_traceless",
+    "name": "무흔",
+    "classId": "moonshade",
+    "kind": "PASSIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 0,
+      "activeMs": 0,
+      "recoveryMs": 0
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 0,
+    "mpCost": 0,
+    "element": "DARK",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "처치한 적이 사망 판정 없이 사라짐 → 다른 적이 인지 못함 (스텔스 진행)"
+  },
+  {
+    "id": "sk_hd_new_moon",
+    "name": "삭월",
+    "classId": "moonshade",
+    "kind": "ULTIMATE",
+    "coef": {
+      "pve": 5,
+      "pvp": 2.4
+    },
+    "frames": {
+      "startupMs": 400,
+      "activeMs": 8000,
+      "recoveryMs": 700,
+      "cancelable": false
+    },
+    "hitbox": {
+      "type": "DASH",
+      "distance": 14,
+      "width": 3
+    },
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 170000,
+    "mpCost": 90,
+    "element": "DARK",
+    "poiseDamage": 40,
+    "movable": true,
+    "description": "8초간 완전히 사라짐. 무적·통과 가능. 종료 시 이동 경로 전체에 참격 폭발",
+    "pvpOverride": {
+      "ccDurationMs": 4800
+    }
+  },
+  {
+    "id": "sk_hd_soar",
+    "name": "비상",
+    "classId": "dragoon",
+    "kind": "ACTIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 260,
+      "activeMs": 3000,
+      "recoveryMs": 400,
+      "cancelable": false
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 20000,
+    "mpCost": 28,
+    "element": "NONE",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "3초간 공중 체류. 공중에서 모든 스킬 사용 가능. PvP에서는 피격 판정 유지"
+  },
+  {
+    "id": "sk_hd_dragonblood",
+    "name": "용혈 각성",
+    "classId": "dragoon",
+    "kind": "PASSIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 0,
+      "activeMs": 0,
+      "recoveryMs": 0
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 0,
+    "mpCost": 0,
+    "element": "FIRE",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "공중에 머무는 시간에 비례해 데미지 증가 (최대 +150%)"
+  },
+  {
+    "id": "sk_hd_summon_wyvern",
+    "name": "비룡 소환",
+    "classId": "dragoon",
+    "kind": "ACTIVE",
+    "coef": {
+      "pve": 2.8,
+      "pvp": 1.3
+    },
+    "frames": {
+      "startupMs": 900,
+      "activeMs": 10000,
+      "recoveryMs": 700,
+      "cancelable": false
+    },
+    "hitbox": {
+      "type": "SECTOR",
+      "range": 8,
+      "angle": 60
+    },
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 120000,
+    "mpCost": 70,
+    "element": "FIRE",
+    "poiseDamage": 30,
+    "movable": true,
+    "description": "비룡 탑승. 10초간 광역 화염 브레스 + 완전 기동"
+  },
+  {
+    "id": "sk_hd_azure_fall",
+    "name": "창천낙하",
+    "classId": "dragoon",
+    "kind": "ULTIMATE",
+    "coef": {
+      "pve": 11,
+      "pvp": 4.2
+    },
+    "frames": {
+      "startupMs": 1600,
+      "activeMs": 200,
+      "recoveryMs": 1000,
+      "cancelable": false
+    },
+    "hitbox": {
+      "type": "CIRCLE",
+      "radius": 7,
+      "offset": 2
+    },
+    "cc": {
+      "type": "GROGGY",
+      "durationMs": 2000,
+      "bossDurationMs": 1000
+    },
+    "cooldownMs": 220000,
+    "mpCost": 110,
+    "element": "NONE",
+    "poiseDamage": 90,
+    "movable": false,
+    "description": "화면 밖까지 도약 후 초광역 낙하. 게임 내 최대 단발 데미지",
+    "pvpOverride": {
+      "ccDurationMs": 1200
+    }
+  },
+  {
+    "id": "sk_hd_contagion",
+    "name": "전염",
+    "classId": "plague_sovereign",
+    "kind": "PASSIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 0,
+      "activeMs": 0,
+      "recoveryMs": 0
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 0,
+    "mpCost": 0,
+    "element": "DARK",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "모든 디버프가 사망 시 반경 8m로 자동 전파"
+  },
+  {
+    "id": "sk_hd_plague_culture",
+    "name": "역병 배양",
+    "classId": "plague_sovereign",
+    "kind": "PASSIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 0,
+      "activeMs": 0,
+      "recoveryMs": 0
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 0,
+    "mpCost": 0,
+    "element": "DARK",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "디버프가 시간이 지날수록 강해짐 (10초마다 +20%, 무제한). PvP에서는 상한 +60% 고정",
+    "pvpOverride": {
+      "executeThreshold": 0.6
+    }
+  },
+  {
+    "id": "sk_hd_immune_collapse",
+    "name": "면역 붕괴",
+    "classId": "plague_sovereign",
+    "kind": "ACTIVE",
+    "coef": {
+      "pve": 1.2,
+      "pvp": 0.6
+    },
+    "frames": {
+      "startupMs": 700,
+      "activeMs": 90,
+      "recoveryMs": 460,
+      "cancelable": false
+    },
+    "hitbox": {
+      "type": "CIRCLE",
+      "radius": 2,
+      "offset": 6
+    },
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 45000,
+    "mpCost": 40,
+    "element": "DARK",
+    "poiseDamage": 8,
+    "movable": false,
+    "description": "대상의 상태이상 저항을 0으로 만듦 (보스 포함, 20초)"
+  },
+  {
+    "id": "sk_hd_black_death",
+    "name": "흑사",
+    "classId": "plague_sovereign",
+    "kind": "ULTIMATE",
+    "coef": {
+      "pve": 3,
+      "pvp": 1.4
+    },
+    "frames": {
+      "startupMs": 1400,
+      "activeMs": 60000,
+      "recoveryMs": 900,
+      "cancelable": false
+    },
+    "hitbox": {
+      "type": "GROUND",
+      "radius": 20,
+      "durationMs": 60000,
+      "tickMs": 1000
+    },
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 300000,
+    "mpCost": 120,
+    "element": "DARK",
+    "poiseDamage": 5,
+    "movable": true,
+    "description": "맵 전체에 역병 확산. 60초간 모든 적이 초당 최대 HP 1.5% 피해, 회복 불가",
+    "pvpOverride": {
+      "ccDurationMs": 36000
+    }
+  },
+  {
+    "id": "sk_hd_stigma",
+    "name": "성흔",
+    "classId": "stigmata",
+    "kind": "ACTIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 400,
+      "activeMs": 60,
+      "recoveryMs": 320,
+      "cancelable": true
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 20000,
+    "mpCost": 35,
+    "element": "LIGHT",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "파티원의 피해를 자신이 대신 받되, 그 피해량의 40%만 실제로 받음"
+  },
+  {
+    "id": "sk_hd_price_of_pain",
+    "name": "고통의 대가",
+    "classId": "stigmata",
+    "kind": "PASSIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 0,
+      "activeMs": 0,
+      "recoveryMs": 0
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 0,
+    "mpCost": 0,
+    "element": "LIGHT",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "자신이 받은 피해량만큼 파티 전체를 회복"
+  },
+  {
+    "id": "sk_hd_martyrdom",
+    "name": "순교",
+    "classId": "stigmata",
+    "kind": "PASSIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 0,
+      "activeMs": 0,
+      "recoveryMs": 0
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 0,
+    "mpCost": 0,
+    "element": "LIGHT",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "자신이 사망하면 파티 전원이 완전 회복 + 15초 무적. 자신은 30초 후 부활"
+  },
+  {
+    "id": "sk_hd_burden_of_all",
+    "name": "만인의 짐",
+    "classId": "stigmata",
+    "kind": "ULTIMATE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 900,
+      "activeMs": 20000,
+      "recoveryMs": 800,
+      "cancelable": false
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 240000,
+    "mpCost": 120,
+    "element": "LIGHT",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "20초간 파티 전원 사망 불가. 종료 시 누적된 피해를 자신이 한꺼번에 받음. PvP에서는 8초",
+    "pvpOverride": {
+      "ccDurationMs": 8000
+    }
+  },
+  {
+    "id": "sk_hd_spirit_load",
+    "name": "정령 장전",
+    "classId": "spiritshot",
+    "kind": "ACTIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 240,
+      "activeMs": 40,
+      "recoveryMs": 260,
+      "cancelable": true
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 6000,
+    "mpCost": 18,
+    "element": "NONE",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "4속성 중 하나를 장전. 모든 화살이 해당 속성으로 변경 + 고유 부가효과"
+  },
+  {
+    "id": "sk_hd_resonance",
+    "name": "속성 공명",
+    "classId": "spiritshot",
+    "kind": "PASSIVE",
+    "coef": {
+      "pve": 0,
+      "pvp": 0
+    },
+    "frames": {
+      "startupMs": 0,
+      "activeMs": 0,
+      "recoveryMs": 0
+    },
+    "hitbox": null,
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 0,
+    "mpCost": 0,
+    "element": "NONE",
+    "poiseDamage": 0,
+    "movable": true,
+    "description": "4속성을 연속으로 순환 사용 시 '대정령 강림' 게이지 충전"
+  },
+  {
+    "id": "sk_hd_tracking_spirit",
+    "name": "추적의 정령",
+    "classId": "spiritshot",
+    "kind": "ACTIVE",
+    "coef": {
+      "pve": 1.9,
+      "pvp": 1
+    },
+    "frames": {
+      "startupMs": 420,
+      "activeMs": 90,
+      "recoveryMs": 380,
+      "cancelable": false
+    },
+    "hitbox": {
+      "type": "PROJECTILE",
+      "radius": 0.3,
+      "speed": 22,
+      "maxDistance": 18,
+      "pierce": 8
+    },
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 12000,
+    "mpCost": 28,
+    "element": "NONE",
+    "poiseDamage": 10,
+    "movable": false,
+    "description": "발사한 화살이 적을 자동 추적하고, 처치 시 다음 적에게 이동 (최대 8회). PvP에서는 2회",
+    "pvpOverride": {
+      "executeThreshold": 2
+    }
+  },
+  {
+    "id": "sk_hd_great_spirit",
+    "name": "대정령 강림",
+    "classId": "spiritshot",
+    "kind": "ULTIMATE",
+    "coef": {
+      "pve": 4.5,
+      "pvp": 2.1
+    },
+    "frames": {
+      "startupMs": 1200,
+      "activeMs": 30000,
+      "recoveryMs": 900,
+      "cancelable": false
+    },
+    "hitbox": {
+      "type": "CIRCLE",
+      "radius": 6,
+      "offset": 4
+    },
+    "cc": {
+      "type": "NONE"
+    },
+    "cooldownMs": 240000,
+    "mpCost": 110,
+    "element": "NONE",
+    "poiseDamage": 20,
+    "movable": true,
+    "description": "4대 정령이 동시 소환되어 30초간 함께 싸움. 각 정령이 독립 AI로 행동",
+    "pvpOverride": {
+      "ccDurationMs": 18000
+    }
+  }
+]

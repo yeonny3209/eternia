@@ -1,0 +1,183 @@
+[
+  {
+    "id": "MQ-1-05",
+    "type": "MAIN",
+    "title": "흉터 아래에서",
+    "map": "haran_plains",
+    "level": 10,
+    "giver": "npc_nomad_elder",
+    "prerequisites": ["MQ-1-04"],
+    "objectives": [
+      { "type": "REACH", "target": "poi_rift_scar" },
+      { "type": "KILL", "target": "mob_rift_shard", "count": 6 }
+    ],
+    "rewards": { "exp": 1400, "gold": 600 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "하늘에 떠 있는 최초의 균열 흉터를 조사한다."
+  },
+  {
+    "id": "MQ-1-06",
+    "type": "MAIN",
+    "title": "여명의 파편",
+    "map": "haran_plains",
+    "level": 13,
+    "giver": "npc_nomad_elder",
+    "prerequisites": ["MQ-1-05"],
+    "objectives": [
+      { "type": "KILL", "target": "boss_bandit_king_kash", "count": 1 },
+      { "type": "COLLECT", "target": "item_shard_solar", "count": 1 }
+    ],
+    "rewards": {
+      "exp": 2600,
+      "gold": 1200,
+      "items": [["item_shard_solar", 1]],
+      "skillPoint": 2
+    },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "솔라 파편을 획득한다. 도적왕 카쉬와의 쟁탈전."
+  },
+  {
+    "id": "SQ-HP-01",
+    "type": "SUB",
+    "title": "유목민의 이동",
+    "map": "haran_plains",
+    "level": 9,
+    "giver": "npc_nomad_elder",
+    "prerequisites": [],
+    "objectives": [{ "type": "ESCORT", "target": "npc_nomad_elder", "count": 1 }],
+    "rewards": { "exp": 700, "gold": 400 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "부족의 이주를 호위한다."
+  },
+  {
+    "id": "SQ-HP-02",
+    "type": "SUB",
+    "title": "들소 떼의 습격",
+    "map": "haran_plains",
+    "level": 9,
+    "giver": "npc_nomad_elder",
+    "prerequisites": [],
+    "objectives": [
+      {
+        "type": "CHOICE",
+        "target": "choice_bison",
+        "choices": ["진정", "도살"],
+        "description": "폭주한 들소 무리를 어떻게 할 것인가"
+      },
+      { "type": "KILL", "target": "mob_bison", "count": 10 }
+    ],
+    "rewards": { "exp": 640, "gold": 380 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "폭주한 들소 무리를 진정시키거나 도살한다."
+  },
+  {
+    "id": "SQ-HP-03",
+    "type": "SUB",
+    "title": "카쉬의 부하",
+    "map": "haran_plains",
+    "level": 11,
+    "giver": "npc_watchtower_chief",
+    "prerequisites": [],
+    "objectives": [{ "type": "KILL", "target": "mob_plains_bandit", "count": 24 }],
+    "rewards": { "exp": 820, "gold": 460, "items": [["item_enhance_stone", 3]] },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "도적단 하급 간부 3인을 각개격파한다."
+  },
+  {
+    "id": "SQ-HP-04",
+    "type": "SUB",
+    "title": "상단의 뒷거래",
+    "map": "haran_plains",
+    "level": 12,
+    "giver": "npc_guild_caravan",
+    "prerequisites": [],
+    "objectives": [
+      { "type": "COLLECT", "target": "item_ether_crystal", "count": 5 },
+      {
+        "type": "CHOICE",
+        "target": "choice_smuggling",
+        "choices": ["고발", "묵인", "협박"],
+        "description": "밀수 현장을 목격했다"
+      }
+    ],
+    "rewards": { "exp": 900, "gold": 800 },
+    "flags": { "repeatable": false, "shareable": false, "autoTrack": true },
+    "summary": "조합 상단이 균열 결정을 밀수 중이다. 고발·묵인·협박 3분기."
+  },
+  {
+    "id": "SQ-HP-05",
+    "type": "SUB",
+    "title": "하늘을 보는 아이",
+    "map": "haran_plains",
+    "level": 12,
+    "giver": "npc_sky_girl",
+    "prerequisites": ["MQ-1-05"],
+    "objectives": [
+      { "type": "TALK", "target": "npc_sky_girl" },
+      { "type": "DEFEND", "target": "poi_nomad_camp", "durationMs": 120000 }
+    ],
+    "rewards": { "exp": 1000, "gold": 520, "skillPoint": 1 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "균열을 예지하는 소녀의 말을 믿고 대피를 유도한다."
+  },
+  {
+    "id": "SQ-HP-06",
+    "type": "SUB",
+    "title": "무너진 감시탑",
+    "map": "haran_plains",
+    "level": 13,
+    "giver": "npc_watchtower_chief",
+    "prerequisites": [],
+    "objectives": [{ "type": "USE", "target": "poi_watchtower", "count": 4 }],
+    "rewards": { "exp": 880, "gold": 500 },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": true },
+    "summary": "감시탑 4기를 수리하면 이후 맵 시야가 해금된다."
+  },
+  {
+    "id": "DQ-HP-01",
+    "type": "DAILY",
+    "title": "평원 순찰",
+    "map": "haran_plains",
+    "level": 10,
+    "giver": "npc_watchtower_chief",
+    "prerequisites": [],
+    "objectives": [{ "type": "REACH", "target": "poi_patrol_point", "count": 5 }],
+    "rewards": { "exp": 600, "gold": 300 },
+    "flags": { "repeatable": true, "shareable": false, "autoTrack": true, "reset": "DAILY" },
+    "summary": "지정 지점 5곳 순찰."
+  },
+  {
+    "id": "DQ-HP-02",
+    "type": "DAILY",
+    "title": "도적 소탕",
+    "map": "haran_plains",
+    "level": 10,
+    "giver": "npc_watchtower_chief",
+    "prerequisites": [],
+    "objectives": [{ "type": "KILL", "target": "mob_plains_bandit", "count": 30 }],
+    "rewards": { "exp": 700, "gold": 360, "items": [["item_enhance_stone", 2]] },
+    "flags": { "repeatable": true, "shareable": false, "autoTrack": true, "reset": "DAILY" },
+    "summary": "도적 30명 처치."
+  },
+  {
+    "id": "HQ-HP-01",
+    "type": "HIDDEN",
+    "title": "비를 부르는 노래",
+    "map": "haran_plains",
+    "level": 14,
+    "giver": null,
+    "prerequisites": [],
+    "objectives": [
+      { "type": "TALK", "target": "npc_nomad_elder", "description": "노래를 배운다" },
+      { "type": "USE", "target": "poi_rift_scar", "description": "비 오는 날씨에 흉터 아래서 재생" }
+    ],
+    "rewards": { "exp": 2000, "gold": 0, "items": [["item_ether_crystal", 5]] },
+    "flags": { "repeatable": false, "shareable": true, "autoTrack": false },
+    "hiddenTrigger": {
+      "kind": "WEATHER",
+      "step": 1,
+      "params": { "weather": "RAIN", "poi": "poi_rift_scar", "requiresSong": true }
+    },
+    "summary": "유목민 노인에게 배운 노래를 비 오는 날 흉터 아래서 재생하면 고대 제단이 출현한다."
+  }
+]

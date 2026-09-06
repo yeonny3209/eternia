@@ -1,0 +1,28 @@
+[
+  { "id": "R-01", "name": "그로트의 숲", "levelRange": [1, 5], "players": 8, "boss": "거대 곰 그로트", "phases": 2, "gimmick": "입문용. 광역 회피 학습", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-02", "name": "균열 조각 무리", "levelRange": [1, 5], "players": 8, "boss": "응집체 코어", "phases": 2, "gimmick": "분열하는 적 동시 처치", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-03", "name": "도적왕 카쉬", "levelRange": [6, 10], "players": 8, "boss": "도적왕 카쉬", "phases": 2, "gimmick": "인질 구출 + 보스전", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-04", "name": "하피의 절벽", "levelRange": [6, 10], "players": 8, "boss": "하피 여왕", "phases": 2, "gimmick": "공중 적 유도 착지", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-05", "name": "오염된 수신", "levelRange": [11, 15], "players": 8, "boss": "수신 나이라", "phases": 3, "gimmick": "오염 정화 릴레이", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-06", "name": "정제탑 폭주", "levelRange": [11, 15], "players": 8, "boss": "폭주 코어", "phases": 3, "gimmick": "냉각 밸브 4개 동시 조작", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-07", "name": "심층 골렘", "levelRange": [16, 20], "players": 8, "boss": "그라비스", "phases": 3, "gimmick": "부위 파괴 → 코어 노출", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-08", "name": "협곡의 밀렵왕", "levelRange": [16, 20], "players": 8, "boss": "밀렵왕 도르크", "phases": 3, "gimmick": "함정 지대 이동전", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-09", "name": "역병의 어머니", "levelRange": [21, 25], "players": 8, "boss": "카사", "phases": 3, "gimmick": "감염자 격리 존 운용", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-10", "name": "늪의 군체", "levelRange": [21, 25], "players": 8, "boss": "촉수 군체", "phases": 3, "gimmick": "촉수 8개 동시 처치 요구", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-11", "name": "빙하의 주인", "levelRange": [26, 30], "players": 8, "boss": "카일룸", "phases": 3, "gimmick": "빙결 해제 파트너 지정", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-12", "name": "심연의 사제", "levelRange": [26, 30], "players": 8, "boss": "무렐", "phases": 3, "gimmick": "산소 관리 + 광역 회피", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-13", "name": "사막의 태양상", "levelRange": [31, 35], "players": 8, "boss": "라멘 완전체", "phases": 3, "gimmick": "빛 반사 8인 배치 퍼즐", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-14", "name": "망자의 행렬", "levelRange": [31, 35], "players": 8, "boss": "오시엔 진체", "phases": 3, "gimmick": "사망자 유령이 계속 참전", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-15", "name": "어미 비룡 스카일라", "levelRange": [36, 40], "players": 8, "boss": "스카일라", "phases": 4, "gimmick": "공중전 + 둥지 방어", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-16", "name": "뇌운의 지배자", "levelRange": [36, 40], "players": 8, "boss": "뇌조왕", "phases": 4, "gimmick": "낙뢰 예고 위치 산개", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-17", "name": "잔불의 화신", "levelRange": [41, 45], "players": 8, "boss": "이그넨 화신", "phases": 4, "gimmick": "용암 상승 + 발판 붕괴", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-18", "name": "배신자의 성", "levelRange": [41, 45], "players": 8, "boss": "성좌회 수장", "phases": 4, "gimmick": "아군이었던 NPC 4인 순차 전투", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-19", "name": "균열 '아가리'", "levelRange": [46, 49], "players": 16, "boss": "아가리", "phases": 4, "gimmick": "파티별 분리 존 → 재합류", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+  { "id": "R-20", "name": "첨탑 다섯 관문", "levelRange": [46, 49], "players": 16, "boss": "관문지기 5기", "phases": 5, "gimmick": "5연전. 파티 분할 동시 공략", "difficulties": ["NORMAL", "ELITE"], "weeklyReward": true },
+
+  { "id": "R-21", "name": "여섯 기둥의 회귀", "levelRange": [50, 50], "players": 16, "boss": "부활한 여섯 신", "phases": 6, "gimmick": "공격대를 6개 조로 나눠 각 신의 속성 제단을 동시 점거. 하나라도 놓치면 전체 광역 즉사. 이전 페이즈 신의 능력이 다음 신에게 누적", "difficulties": ["NORMAL", "ELITE", "CHAOS"], "weeklyReward": true, "reward": "신화 무기 '기둥을 꺾는 것'" },
+  { "id": "R-22", "name": "무명의 왕좌", "levelRange": [50, 50], "players": 16, "boss": "이름 없는 자 (진체)", "phases": 4, "gimmick": "3페이즈에서 공격대 전원이 강제로 시야를 잃는다. '이름 부르기' — 호명된 사람은 3초 내 지정 지점으로 이동", "difficulties": ["NORMAL", "ELITE", "CHAOS"], "weeklyReward": true, "reward": "신화 방어구 세트 '이름 없는 자의 유산'" },
+  { "id": "R-23", "name": "창세의 회랑", "levelRange": [50, 50], "players": 16, "boss": "세계를 다시 쓰는 자", "phases": 5, "gimmick": "페이즈마다 전장의 규칙이 바뀐다: 중력 반전 → 회복 금지 → 쿨타임 3배 → 즉사 판정 존 → 무작위 직업 교환", "difficulties": ["NORMAL", "ELITE", "CHAOS"], "weeklyReward": true, "reward": "신화 장신구 '창세의 서'" },
+  { "id": "R-24", "name": "끝없는 균열", "levelRange": [50, 50], "players": 16, "boss": "무작위 조합 보스", "phases": 99, "gimmick": "무한 페이즈. 공격대 부활 횟수 총 8회 제한. 매주 서버 시드로 패턴 재생성", "difficulties": ["NORMAL", "ELITE", "CHAOS"], "weeklyReward": true, "reward": "주간 랭킹 보상 + 각성 재료 최대 공급처" },
+  { "id": "R-25", "name": "일곱 번째 이름", "levelRange": [50, 50], "players": 16, "boss": "이름을 잃은 것", "phases": 7, "gimmick": "앞선 4개 레이드의 대표 기믹이 전부 재등장한 뒤 7페이즈에서 동시에 발생. 최종 페이즈에서 공격대가 '세계를 지킬지 / 넘겨줄지' 투표", "difficulties": ["NORMAL", "ELITE", "CHAOS"], "weeklyReward": true, "reward": "최종 칭호 '이름을 되찾은 자', 신화 무기 완성형" }
+]

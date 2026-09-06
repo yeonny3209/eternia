@@ -1,0 +1,74 @@
+[
+  {
+    "id": "set_riftwarden",
+    "name": "균열 감시자",
+    "pieces": [
+      "item_riftwarden_blade",
+      "item_riftwarden_helm",
+      "item_riftwarden_chest",
+      "item_riftwarden_gloves"
+    ],
+    "bonuses": [
+      {
+        "count": 2,
+        "description": "방어 +8%, 상태이상 저항 +15%",
+        "effect": {
+          "stat": "def",
+          "mode": "pct"
+        }
+      },
+      {
+        "count": 4,
+        "description": "패리 성공 시 '균열의 반격' — 3초간 자세 피해 +50%, 스킬 쿨타임 1초 감소",
+        "effect": {
+          "stat": "atk",
+          "mode": "pct",
+          "trigger": "ON_PARRY",
+          "uptime": 0.25
+        }
+      }
+    ]
+  },
+  {
+    "id": "set_endless_afterimage",
+    "name": "무한의 잔상",
+    "pieces": [
+      "item_afterimage_boots",
+      "item_afterimage_helm",
+      "item_afterimage_shoulder",
+      "item_afterimage_chest",
+      "item_afterimage_gloves",
+      "item_afterimage_belt"
+    ],
+    "bonuses": [
+      {
+        "count": 2,
+        "description": "회피 스태미나 소모 -20%",
+        "effect": {
+          "stat": "stamina",
+          "mode": "pct"
+        }
+      },
+      {
+        "count": 4,
+        "description": "회피 직후 1초간 이동속도 +25%",
+        "effect": {
+          "stat": "moveSpeed",
+          "mode": "pct",
+          "trigger": "ON_DODGE",
+          "uptime": 0.3
+        }
+      },
+      {
+        "count": 6,
+        "description": "회피 구르기가 잔상을 남기고, 잔상이 마지막 스킬을 복제 시전한다 (플레이 스타일 변경)",
+        "effect": {
+          "stat": "dmgIncrease",
+          "mode": "pct",
+          "trigger": "ON_DODGE",
+          "uptime": 0.35
+        }
+      }
+    ]
+  }
+]

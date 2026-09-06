@@ -1,0 +1,32 @@
+{
+  "name": "eternia",
+  "private": true,
+  "version": "0.1.0",
+  "description": "에테르니아 — 균열의 기록 / Eternia: Chronicle of the Rift",
+  "type": "module",
+  "workspaces": [
+    "packages/shared",
+    "packages/server",
+    "packages/client"
+  ],
+  "scripts": {
+    "build": "npm run build -w @eternia/shared && npm run build -w @eternia/client",
+    "build:client": "npm run build -w @eternia/client",
+    "dev:client": "npm run dev -w @eternia/client",
+    "dev:server": "npm run dev -w @eternia/server",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b packages/shared packages/server packages/client",
+    "validate:data": "tsx tools/validate-data.ts",
+    "gen:items": "tsx tools/generate-items.ts",
+    "sim:balance": "tsx tools/balance-sim.ts",
+    "check": "npm run validate:data && npm run test && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "engines": { "node": ">=20" }
+}

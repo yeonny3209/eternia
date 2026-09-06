@@ -1,0 +1,988 @@
+[
+  {
+    "id": "mob_grey_wolf",
+    "name": "회색 늑대",
+    "level": 4,
+    "kind": "NORMAL",
+    "hp": 302,
+    "atk": 30,
+    "def": 15,
+    "poise": 70,
+    "exp": 49,
+    "gold": [
+      14,
+      25
+    ],
+    "map": "whispering_woods",
+    "dropTable": "drop_whispering_woods_normal"
+  },
+  {
+    "id": "mob_forest_spider",
+    "name": "숲 거미",
+    "level": 5,
+    "kind": "NORMAL",
+    "hp": 338,
+    "atk": 35,
+    "def": 18,
+    "poise": 72,
+    "exp": 65,
+    "gold": [
+      16,
+      29
+    ],
+    "map": "whispering_woods",
+    "dropTable": "drop_whispering_woods_normal"
+  },
+  {
+    "id": "mob_treant",
+    "name": "나무정령",
+    "level": 7,
+    "kind": "NORMAL",
+    "hp": 410,
+    "atk": 44,
+    "def": 24,
+    "poise": 77,
+    "exp": 106,
+    "gold": [
+      20,
+      36
+    ],
+    "map": "whispering_woods",
+    "dropTable": "drop_whispering_woods_normal"
+  },
+  {
+    "id": "mob_mushroom_soldier",
+    "name": "버섯병사",
+    "level": 6,
+    "kind": "NORMAL",
+    "hp": 374,
+    "atk": 40,
+    "def": 21,
+    "poise": 74,
+    "exp": 84,
+    "gold": [
+      18,
+      32
+    ],
+    "map": "whispering_woods",
+    "dropTable": "drop_whispering_woods_normal"
+  },
+  {
+    "id": "boss_grote",
+    "name": "거대 곰 그로트",
+    "level": 10,
+    "kind": "FIELD_BOSS",
+    "hp": 17019,
+    "atk": 139,
+    "def": 61,
+    "poise": 504,
+    "exp": 4134,
+    "gold": [
+      486,
+      875
+    ],
+    "map": "whispering_woods",
+    "dropTable": "drop_boss_whispering_woods"
+  },
+  {
+    "id": "mob_plains_bandit",
+    "name": "평원 도적단",
+    "level": 9,
+    "kind": "NORMAL",
+    "hp": 484,
+    "atk": 53,
+    "def": 29,
+    "poise": 82,
+    "exp": 158,
+    "gold": [
+      25,
+      45
+    ],
+    "map": "haran_plains",
+    "dropTable": "drop_haran_plains_normal"
+  },
+  {
+    "id": "mob_bison",
+    "name": "들소",
+    "level": 8,
+    "kind": "NORMAL",
+    "hp": 448,
+    "atk": 49,
+    "def": 26,
+    "poise": 79,
+    "exp": 130,
+    "gold": [
+      23,
+      41
+    ],
+    "map": "haran_plains",
+    "dropTable": "drop_haran_plains_normal"
+  },
+  {
+    "id": "mob_harpy",
+    "name": "하피",
+    "level": 11,
+    "kind": "NORMAL",
+    "hp": 555,
+    "atk": 63,
+    "def": 35,
+    "poise": 86,
+    "exp": 221,
+    "gold": [
+      29,
+      52
+    ],
+    "map": "haran_plains",
+    "dropTable": "drop_haran_plains_normal"
+  },
+  {
+    "id": "mob_rift_shard",
+    "name": "균열 조각",
+    "level": 10,
+    "kind": "ELITE",
+    "hp": 2181,
+    "atk": 87,
+    "def": 45,
+    "poise": 185,
+    "exp": 658,
+    "gold": [
+      81,
+      146
+    ],
+    "map": "haran_plains",
+    "dropTable": "drop_haran_plains_elite"
+  },
+  {
+    "id": "boss_bandit_king_kash",
+    "name": "도적왕 카쉬",
+    "level": 14,
+    "kind": "FIELD_BOSS",
+    "hp": 21628,
+    "atk": 183,
+    "def": 82,
+    "poise": 562,
+    "exp": 7362,
+    "gold": [
+      644,
+      1159
+    ],
+    "map": "haran_plains",
+    "dropTable": "drop_boss_haran_plains"
+  },
+  {
+    "id": "mob_tainted_fishman",
+    "name": "오염된 어인",
+    "level": 12,
+    "kind": "NORMAL",
+    "hp": 590,
+    "atk": 67,
+    "def": 38,
+    "poise": 89,
+    "exp": 256,
+    "gold": [
+      31,
+      56
+    ],
+    "map": "silverflow_basin",
+    "dropTable": "drop_silverflow_basin_normal"
+  },
+  {
+    "id": "mob_river_snake",
+    "name": "강뱀",
+    "level": 13,
+    "kind": "NORMAL",
+    "hp": 629,
+    "atk": 72,
+    "def": 40,
+    "poise": 91,
+    "exp": 294,
+    "gold": [
+      34,
+      61
+    ],
+    "map": "silverflow_basin",
+    "dropTable": "drop_silverflow_basin_normal"
+  },
+  {
+    "id": "mob_crystal_crab",
+    "name": "수정게",
+    "level": 14,
+    "kind": "ELITE",
+    "hp": 2787,
+    "atk": 115,
+    "def": 60,
+    "poise": 206,
+    "exp": 1171,
+    "gold": [
+      107,
+      193
+    ],
+    "map": "silverflow_basin",
+    "dropTable": "drop_silverflow_basin_elite"
+  },
+  {
+    "id": "boss_naira",
+    "name": "오염된 수신 나이라",
+    "level": 16,
+    "kind": "FIELD_BOSS",
+    "hp": 23893,
+    "atk": 205,
+    "def": 93,
+    "poise": 590,
+    "exp": 9314,
+    "gold": [
+      724,
+      1303
+    ],
+    "map": "silverflow_basin",
+    "dropTable": "drop_boss_silverflow_basin"
+  },
+  {
+    "id": "mob_miner_wraith",
+    "name": "광부 망령",
+    "level": 16,
+    "kind": "NORMAL",
+    "hp": 736,
+    "atk": 86,
+    "def": 49,
+    "poise": 98,
+    "exp": 423,
+    "gold": [
+      40,
+      72
+    ],
+    "map": "crimson_ravine",
+    "dropTable": "drop_crimson_ravine_normal"
+  },
+  {
+    "id": "mob_rock_golem",
+    "name": "바위골렘",
+    "level": 18,
+    "kind": "NORMAL",
+    "hp": 810,
+    "atk": 95,
+    "def": 54,
+    "poise": 103,
+    "exp": 522,
+    "gold": [
+      45,
+      81
+    ],
+    "map": "crimson_ravine",
+    "dropTable": "drop_crimson_ravine_normal"
+  },
+  {
+    "id": "mob_red_scorpion",
+    "name": "붉은 전갈",
+    "level": 17,
+    "kind": "NORMAL",
+    "hp": 771,
+    "atk": 90,
+    "def": 52,
+    "poise": 101,
+    "exp": 471,
+    "gold": [
+      42,
+      76
+    ],
+    "map": "crimson_ravine",
+    "dropTable": "drop_crimson_ravine_normal"
+  },
+  {
+    "id": "boss_gravis",
+    "name": "심층 골렘 그라비스",
+    "level": 22,
+    "kind": "FIELD_BOSS",
+    "hp": 30764,
+    "atk": 272,
+    "def": 125,
+    "poise": 677,
+    "exp": 16470,
+    "gold": [
+      961,
+      1730
+    ],
+    "map": "crimson_ravine",
+    "dropTable": "drop_boss_crimson_ravine"
+  },
+  {
+    "id": "mob_plague_corpse",
+    "name": "역병 시체",
+    "level": 20,
+    "kind": "NORMAL",
+    "hp": 881,
+    "atk": 104,
+    "def": 60,
+    "poise": 108,
+    "exp": 631,
+    "gold": [
+      49,
+      88
+    ],
+    "map": "shadowmire",
+    "dropTable": "drop_shadowmire_normal"
+  },
+  {
+    "id": "mob_swamp_tentacle",
+    "name": "늪 촉수",
+    "level": 22,
+    "kind": "NORMAL",
+    "hp": 952,
+    "atk": 113,
+    "def": 66,
+    "poise": 113,
+    "exp": 749,
+    "gold": [
+      53,
+      95
+    ],
+    "map": "shadowmire",
+    "dropTable": "drop_shadowmire_normal"
+  },
+  {
+    "id": "mob_devil_firefly",
+    "name": "마귀 반딧불",
+    "level": 21,
+    "kind": "NORMAL",
+    "hp": 916,
+    "atk": 109,
+    "def": 63,
+    "poise": 110,
+    "exp": 688,
+    "gold": [
+      51,
+      92
+    ],
+    "map": "shadowmire",
+    "dropTable": "drop_shadowmire_normal"
+  },
+  {
+    "id": "boss_kasa",
+    "name": "역병의 어머니 카사",
+    "level": 26,
+    "kind": "FIELD_BOSS",
+    "hp": 35371,
+    "atk": 316,
+    "def": 146,
+    "poise": 734,
+    "exp": 22290,
+    "gold": [
+      1120,
+      2016
+    ],
+    "map": "shadowmire",
+    "dropTable": "drop_boss_shadowmire"
+  },
+  {
+    "id": "mob_frost_wolf",
+    "name": "서리 늑대",
+    "level": 24,
+    "kind": "NORMAL",
+    "hp": 1026,
+    "atk": 122,
+    "def": 71,
+    "poise": 118,
+    "exp": 876,
+    "gold": [
+      58,
+      104
+    ],
+    "map": "frostreach",
+    "dropTable": "drop_frostreach_normal"
+  },
+  {
+    "id": "mob_ice_giant",
+    "name": "얼음 거인",
+    "level": 27,
+    "kind": "ELITE",
+    "hp": 4718,
+    "atk": 204,
+    "def": 112,
+    "poise": 275,
+    "exp": 3798,
+    "gold": [
+      193,
+      347
+    ],
+    "map": "frostreach",
+    "dropTable": "drop_frostreach_elite"
+  },
+  {
+    "id": "mob_yeti",
+    "name": "설인",
+    "level": 25,
+    "kind": "NORMAL",
+    "hp": 1061,
+    "atk": 127,
+    "def": 74,
+    "poise": 120,
+    "exp": 944,
+    "gold": [
+      60,
+      108
+    ],
+    "map": "frostreach",
+    "dropTable": "drop_frostreach_normal"
+  },
+  {
+    "id": "boss_kailum",
+    "name": "빙하의 주인 카일룸",
+    "level": 30,
+    "kind": "FIELD_BOSS",
+    "hp": 39977,
+    "atk": 360,
+    "def": 167,
+    "poise": 792,
+    "exp": 28926,
+    "gold": [
+      1278,
+      2300
+    ],
+    "map": "frostreach",
+    "dropTable": "drop_boss_frostreach"
+  },
+  {
+    "id": "mob_skeleton_soldier",
+    "name": "해골 병사",
+    "level": 26,
+    "kind": "NORMAL",
+    "hp": 1097,
+    "atk": 132,
+    "def": 77,
+    "poise": 122,
+    "exp": 1013,
+    "gold": [
+      62,
+      112
+    ],
+    "map": "forgotten_aqueduct",
+    "dropTable": "drop_forgotten_aqueduct_normal"
+  },
+  {
+    "id": "mob_dead_priest",
+    "name": "망자 사제",
+    "level": 28,
+    "kind": "NORMAL",
+    "hp": 1171,
+    "atk": 141,
+    "def": 82,
+    "poise": 127,
+    "exp": 1159,
+    "gold": [
+      67,
+      121
+    ],
+    "map": "forgotten_aqueduct",
+    "dropTable": "drop_forgotten_aqueduct_normal"
+  },
+  {
+    "id": "mob_rot_slime",
+    "name": "부패 슬라임",
+    "level": 27,
+    "kind": "NORMAL",
+    "hp": 1132,
+    "atk": 136,
+    "def": 80,
+    "poise": 125,
+    "exp": 1085,
+    "gold": [
+      64,
+      115
+    ],
+    "map": "forgotten_aqueduct",
+    "dropTable": "drop_forgotten_aqueduct_normal"
+  },
+  {
+    "id": "boss_osien",
+    "name": "무덤지기 오시엔",
+    "level": 32,
+    "kind": "FIELD_BOSS",
+    "hp": 42165,
+    "atk": 382,
+    "def": 179,
+    "poise": 821,
+    "exp": 32545,
+    "gold": [
+      1357,
+      2443
+    ],
+    "map": "forgotten_aqueduct",
+    "dropTable": "drop_boss_forgotten_aqueduct"
+  },
+  {
+    "id": "mob_sandworm",
+    "name": "모래벌레",
+    "level": 30,
+    "kind": "NORMAL",
+    "hp": 1242,
+    "atk": 150,
+    "def": 88,
+    "poise": 132,
+    "exp": 1315,
+    "gold": [
+      71,
+      128
+    ],
+    "map": "sehab_ruins",
+    "dropTable": "drop_sehab_ruins_normal"
+  },
+  {
+    "id": "mob_ruin_guardian",
+    "name": "유적 수호기",
+    "level": 33,
+    "kind": "ELITE",
+    "hp": 5631,
+    "atk": 246,
+    "def": 134,
+    "poise": 306,
+    "exp": 5477,
+    "gold": [
+      233,
+      419
+    ],
+    "map": "sehab_ruins",
+    "dropTable": "drop_sehab_ruins_elite"
+  },
+  {
+    "id": "mob_mummy_priest",
+    "name": "미라 사제",
+    "level": 31,
+    "kind": "NORMAL",
+    "hp": 1277,
+    "atk": 155,
+    "def": 91,
+    "poise": 134,
+    "exp": 1396,
+    "gold": [
+      73,
+      131
+    ],
+    "map": "sehab_ruins",
+    "dropTable": "drop_sehab_ruins_normal"
+  },
+  {
+    "id": "boss_ramen",
+    "name": "태양의 수호상 라멘",
+    "level": 36,
+    "kind": "FIELD_BOSS",
+    "hp": 46771,
+    "atk": 426,
+    "def": 200,
+    "poise": 878,
+    "exp": 40371,
+    "gold": [
+      1516,
+      2729
+    ],
+    "map": "sehab_ruins",
+    "dropTable": "drop_boss_sehab_ruins"
+  },
+  {
+    "id": "mob_sky_spirit",
+    "name": "하늘 정령",
+    "level": 34,
+    "kind": "NORMAL",
+    "hp": 1387,
+    "atk": 168,
+    "def": 99,
+    "poise": 142,
+    "exp": 1653,
+    "gold": [
+      80,
+      144
+    ],
+    "map": "aeris_isles",
+    "dropTable": "drop_aeris_isles_normal"
+  },
+  {
+    "id": "mob_thunderbird",
+    "name": "뇌조",
+    "level": 36,
+    "kind": "NORMAL",
+    "hp": 1458,
+    "atk": 178,
+    "def": 105,
+    "poise": 146,
+    "exp": 1835,
+    "gold": [
+      84,
+      151
+    ],
+    "map": "aeris_isles",
+    "dropTable": "drop_aeris_isles_normal"
+  },
+  {
+    "id": "mob_young_wyvern",
+    "name": "어린 비룡",
+    "level": 38,
+    "kind": "ELITE",
+    "hp": 6374,
+    "atk": 280,
+    "def": 154,
+    "poise": 333,
+    "exp": 7092,
+    "gold": [
+      266,
+      479
+    ],
+    "map": "aeris_isles",
+    "dropTable": "drop_aeris_isles_elite"
+  },
+  {
+    "id": "boss_skyla",
+    "name": "어미 비룡 스카일라",
+    "level": 40,
+    "kind": "FIELD_BOSS",
+    "hp": 51453,
+    "atk": 470,
+    "def": 220,
+    "poise": 936,
+    "exp": 48975,
+    "gold": [
+      1674,
+      3013
+    ],
+    "map": "aeris_isles",
+    "dropTable": "drop_boss_aeris_isles"
+  },
+  {
+    "id": "mob_fire_spirit",
+    "name": "화염 정령",
+    "level": 37,
+    "kind": "NORMAL",
+    "hp": 1493,
+    "atk": 182,
+    "def": 108,
+    "poise": 149,
+    "exp": 1930,
+    "gold": [
+      86,
+      155
+    ],
+    "map": "obsidian_caldera",
+    "dropTable": "drop_obsidian_caldera_normal"
+  },
+  {
+    "id": "mob_lava_golem",
+    "name": "용암 골렘",
+    "level": 40,
+    "kind": "ELITE",
+    "hp": 6671,
+    "atk": 294,
+    "def": 162,
+    "poise": 343,
+    "exp": 7791,
+    "gold": [
+      279,
+      502
+    ],
+    "map": "obsidian_caldera",
+    "dropTable": "drop_obsidian_caldera_elite"
+  },
+  {
+    "id": "mob_fire_drake",
+    "name": "화룡 유생체",
+    "level": 39,
+    "kind": "NORMAL",
+    "hp": 1567,
+    "atk": 191,
+    "def": 113,
+    "poise": 154,
+    "exp": 2125,
+    "gold": [
+      91,
+      164
+    ],
+    "map": "obsidian_caldera",
+    "dropTable": "drop_obsidian_caldera_normal"
+  },
+  {
+    "id": "boss_ignen_avatar",
+    "name": "잔불의 이그넨 화신",
+    "level": 43,
+    "kind": "FIELD_BOSS",
+    "hp": 54888,
+    "atk": 504,
+    "def": 236,
+    "poise": 979,
+    "exp": 55929,
+    "gold": [
+      1793,
+      3227
+    ],
+    "map": "obsidian_caldera",
+    "dropTable": "drop_boss_obsidian_caldera"
+  },
+  {
+    "id": "mob_deep_fishman",
+    "name": "심해 어인",
+    "level": 28,
+    "kind": "NORMAL",
+    "hp": 1171,
+    "atk": 141,
+    "def": 82,
+    "poise": 127,
+    "exp": 1159,
+    "gold": [
+      67,
+      121
+    ],
+    "map": "sunken_laisha",
+    "dropTable": "drop_sunken_laisha_normal"
+  },
+  {
+    "id": "mob_drowned_citizen",
+    "name": "수몰 시민",
+    "level": 29,
+    "kind": "NORMAL",
+    "hp": 1206,
+    "atk": 145,
+    "def": 85,
+    "poise": 130,
+    "exp": 1236,
+    "gold": [
+      69,
+      124
+    ],
+    "map": "sunken_laisha",
+    "dropTable": "drop_sunken_laisha_normal"
+  },
+  {
+    "id": "mob_tentacle_colony",
+    "name": "촉수 군체",
+    "level": 31,
+    "kind": "ELITE",
+    "hp": 5323,
+    "atk": 232,
+    "def": 127,
+    "poise": 296,
+    "exp": 4886,
+    "gold": [
+      220,
+      396
+    ],
+    "map": "sunken_laisha",
+    "dropTable": "drop_sunken_laisha_elite"
+  },
+  {
+    "id": "boss_murel",
+    "name": "심연의 사제 무렐",
+    "level": 34,
+    "kind": "FIELD_BOSS",
+    "hp": 44583,
+    "atk": 404,
+    "def": 188,
+    "poise": 850,
+    "exp": 36360,
+    "gold": [
+      1436,
+      2585
+    ],
+    "map": "sunken_laisha",
+    "dropTable": "drop_boss_sunken_laisha"
+  },
+  {
+    "id": "mob_rift_predator",
+    "name": "균열 포식자",
+    "level": 46,
+    "kind": "NORMAL",
+    "hp": 1819,
+    "atk": 224,
+    "def": 133,
+    "poise": 170,
+    "exp": 2878,
+    "gold": [
+      106,
+      191
+    ],
+    "map": "riftwastes",
+    "dropTable": "drop_riftwastes_normal"
+  },
+  {
+    "id": "mob_time_echo",
+    "name": "시간 잔상",
+    "level": 45,
+    "kind": "NORMAL",
+    "hp": 1783,
+    "atk": 219,
+    "def": 130,
+    "poise": 168,
+    "exp": 2764,
+    "gold": [
+      104,
+      187
+    ],
+    "map": "riftwastes",
+    "dropTable": "drop_riftwastes_normal"
+  },
+  {
+    "id": "mob_collapsed",
+    "name": "붕괴체",
+    "level": 47,
+    "kind": "ELITE",
+    "hp": 7710,
+    "atk": 342,
+    "def": 190,
+    "poise": 380,
+    "exp": 10478,
+    "gold": [
+      325,
+      585
+    ],
+    "map": "riftwastes",
+    "dropTable": "drop_riftwastes_elite"
+  },
+  {
+    "id": "boss_maw",
+    "name": "균열 그 자체 '아가리'",
+    "level": 50,
+    "kind": "FIELD_BOSS",
+    "hp": 62852,
+    "atk": 581,
+    "def": 274,
+    "poise": 1080,
+    "exp": 73801,
+    "gold": [
+      2070,
+      3726
+    ],
+    "map": "riftwastes",
+    "dropTable": "drop_boss_riftwastes"
+  },
+  {
+    "id": "mob_god_remnant",
+    "name": "신의 잔재",
+    "level": 48,
+    "kind": "NORMAL",
+    "hp": 1893,
+    "atk": 233,
+    "def": 138,
+    "poise": 175,
+    "exp": 3112,
+    "gold": [
+      111,
+      200
+    ],
+    "map": "skyspire",
+    "dropTable": "drop_skyspire_normal"
+  },
+  {
+    "id": "mob_pillar_guardian",
+    "name": "기둥 수호자",
+    "level": 49,
+    "kind": "ELITE",
+    "hp": 8018,
+    "atk": 356,
+    "def": 197,
+    "poise": 391,
+    "exp": 11313,
+    "gold": [
+      338,
+      608
+    ],
+    "map": "skyspire",
+    "dropTable": "drop_skyspire_elite"
+  },
+  {
+    "id": "boss_gatekeeper_1",
+    "name": "관문지기 제1위",
+    "level": 50,
+    "kind": "FIELD_BOSS",
+    "hp": 62852,
+    "atk": 581,
+    "def": 274,
+    "poise": 1080,
+    "exp": 73801,
+    "gold": [
+      2070,
+      3726
+    ],
+    "map": "skyspire",
+    "dropTable": "drop_boss_skyspire"
+  },
+  {
+    "id": "mob_nameless_child",
+    "name": "무명의 아이",
+    "level": 50,
+    "kind": "NORMAL",
+    "hp": 1964,
+    "atk": 242,
+    "def": 144,
+    "poise": 180,
+    "exp": 3355,
+    "gold": [
+      115,
+      207
+    ],
+    "map": "nameless_verge",
+    "dropTable": "drop_nameless_verge_normal"
+  },
+  {
+    "id": "mob_verge_walker",
+    "name": "경계를 걷는 것",
+    "level": 50,
+    "kind": "ELITE",
+    "hp": 8156,
+    "atk": 363,
+    "def": 202,
+    "poise": 396,
+    "exp": 11741,
+    "gold": [
+      345,
+      621
+    ],
+    "map": "nameless_verge",
+    "dropTable": "drop_nameless_verge_elite"
+  },
+  {
+    "id": "boss_nameless",
+    "name": "이름 없는 자",
+    "level": 50,
+    "kind": "FIELD_BOSS",
+    "hp": 62852,
+    "atk": 581,
+    "def": 274,
+    "poise": 1080,
+    "exp": 73801,
+    "gold": [
+      2070,
+      3726
+    ],
+    "map": "nameless_verge",
+    "dropTable": "drop_boss_nameless_verge"
+  },
+  {
+    "id": "mob_doppelganger",
+    "name": "도플갱어",
+    "level": 30,
+    "kind": "ELITE",
+    "hp": 5175,
+    "atk": 225,
+    "def": 123,
+    "poise": 290,
+    "exp": 4602,
+    "gold": [
+      213,
+      383
+    ],
+    "map": "warped_chamber",
+    "dropTable": "drop_warped_chamber_elite"
+  },
+  {
+    "id": "boss_chamber_master",
+    "name": "방의 주인",
+    "level": 50,
+    "kind": "FIELD_BOSS",
+    "hp": 62852,
+    "atk": 581,
+    "def": 274,
+    "poise": 1080,
+    "exp": 73801,
+    "gold": [
+      2070,
+      3726
+    ],
+    "map": "warped_chamber",
+    "dropTable": "drop_boss_warped_chamber"
+  }
+]
