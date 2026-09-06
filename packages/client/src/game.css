@@ -1,0 +1,757 @@
+/* 오픈월드 게임 UI — HUD, 패널, 모달, 캐릭터 생성 */
+
+.game-wrap {
+  position: relative;
+}
+
+.game-stage {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #070a12;
+}
+
+canvas#world {
+  display: block;
+  width: 100%;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+/* ---------------------------- HUD 상단 ---------------------------- */
+
+.hud-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, rgba(4, 8, 18, 0.9), rgba(4, 8, 18, 0));
+  pointer-events: none;
+}
+
+.hud-name strong {
+  display: block;
+  font-size: 15px;
+}
+
+.hud-name span {
+  font-size: 11.5px;
+  color: var(--accent);
+}
+
+.hud-bars {
+  display: grid;
+  gap: 4px;
+  max-width: 360px;
+}
+
+.hbar {
+  position: relative;
+  height: 13px;
+  background: rgba(2, 6, 14, 0.75);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.hbar i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #16a34a, #4ade80);
+  transition: width 0.1s linear;
+}
+
+.hbar.mp i {
+  background: linear-gradient(90deg, #1d4ed8, #60a5fa);
+}
+
+.hbar.st {
+  height: 7px;
+}
+
+.hbar.st i {
+  background: linear-gradient(90deg, #0e7490, #38bdf8);
+}
+
+.hbar.xp {
+  height: 7px;
+}
+
+.hbar.xp i {
+  background: linear-gradient(90deg, #a16207, #fbbf24);
+}
+
+.hbar b {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: ui-monospace, monospace;
+  color: #f8fafc;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.hud-place {
+  text-align: right;
+}
+
+.hud-place strong {
+  display: block;
+  font-size: 14px;
+}
+
+.hud-place span {
+  font-size: 11.5px;
+  color: var(--accent-2);
+  font-family: ui-monospace, monospace;
+}
+
+/* ---------------------------- 퀘스트 추적 ---------------------------- */
+
+.hud-quest {
+  position: absolute;
+  top: 78px;
+  left: 14px;
+  width: 236px;
+  pointer-events: none;
+  font-size: 12px;
+}
+
+.qt {
+  background: rgba(4, 8, 18, 0.72);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--accent-2);
+  border-radius: 7px;
+  padding: 7px 9px;
+  margin-bottom: 6px;
+}
+
+.qt strong {
+  font-size: 12.5px;
+}
+
+.qt em {
+  display: block;
+  color: var(--ok);
+  font-size: 11px;
+  font-style: normal;
+}
+
+.qt ul {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qt li {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+.qt li.done {
+  color: var(--ok);
+  text-decoration: line-through;
+}
+
+.qt-empty {
+  background: rgba(4, 8, 18, 0.6);
+  border: 1px dashed var(--line);
+  border-radius: 7px;
+  padding: 7px 9px;
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+/* ---------------------------- 미니맵 ---------------------------- */
+
+.minimap {
+  position: absolute;
+  top: 78px;
+  right: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(4, 8, 18, 0.8);
+}
+
+/* ---------------------------- 토스트 ---------------------------- */
+
+.toasts {
+  position: absolute;
+  bottom: 96px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  gap: 5px;
+  justify-items: center;
+  pointer-events: none;
+}
+
+.toast {
+  background: rgba(6, 11, 22, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 15px;
+  font-size: 12.5px;
+  transition: opacity 0.5s;
+}
+
+.toast.loot {
+  border-color: rgba(96, 165, 250, 0.6);
+  color: #93c5fd;
+}
+
+.toast.level {
+  border-color: rgba(250, 204, 21, 0.7);
+  color: #fde047;
+}
+
+.toast.danger {
+  border-color: rgba(248, 113, 113, 0.6);
+  color: #fca5a5;
+}
+
+.toast.quest {
+  border-color: rgba(74, 222, 128, 0.6);
+  color: #86efac;
+}
+
+.toast.out {
+  opacity: 0;
+}
+
+/* ---------------------------- HUD 하단 ---------------------------- */
+
+.hud-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 14px;
+  background: linear-gradient(0deg, rgba(4, 8, 18, 0.92), rgba(4, 8, 18, 0));
+  pointer-events: none;
+}
+
+.hotbar {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 7px;
+}
+
+.hotbar .slot {
+  position: relative;
+  min-width: 92px;
+  background: rgba(10, 16, 30, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 5px 9px;
+  text-align: center;
+}
+
+.hotbar .k {
+  display: block;
+  font-family: ui-monospace, monospace;
+  font-size: 10px;
+  color: var(--accent);
+}
+
+.hotbar .n {
+  display: block;
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+
+.hotbar .cd {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(2, 6, 14, 0.8);
+  border-radius: 8px;
+  font-family: ui-monospace, monospace;
+  font-size: 15px;
+  color: #cbd5e1;
+}
+
+.hud-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.hud-keys kbd {
+  background: rgba(20, 28, 48, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0 5px;
+  font-family: ui-monospace, monospace;
+  font-size: 10px;
+  color: var(--text);
+}
+
+/* ---------------------------- 사이드 패널 ---------------------------- */
+
+.side-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(440px, 96vw);
+  background: rgba(9, 13, 24, 0.98);
+  border-left: 1px solid var(--line);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+}
+
+.sp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px;
+}
+
+.sp-close {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.sp-body {
+  padding: 14px 16px 40px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.sp-body h4 {
+  margin: 18px 0 8px;
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sp-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 12px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.sp-stats b {
+  color: var(--text);
+  font-family: ui-monospace, monospace;
+}
+
+.sp-stats em {
+  font-style: normal;
+  color: var(--accent);
+  font-size: 11px;
+}
+
+.eq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.eq-slot {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 5px 9px;
+  font-size: 11.5px;
+}
+
+.eq-slot.filled {
+  border-color: rgba(96, 165, 250, 0.4);
+}
+
+.eq-name {
+  color: var(--muted);
+}
+
+.eq-item {
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bag {
+  display: grid;
+  gap: 7px;
+}
+
+.item {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 11px;
+}
+
+.item.equipped {
+  border-color: rgba(96, 165, 250, 0.55);
+  background: rgba(30, 58, 138, 0.18);
+}
+
+.item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.item-head .tag {
+  font-size: 10.5px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.item-stats {
+  font-size: 11.5px;
+  color: #cbd5e1;
+  font-family: ui-monospace, monospace;
+  margin-top: 3px;
+}
+
+.item-affix {
+  font-size: 11px;
+  color: #86efac;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.item-actions {
+  display: flex;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+button.mini {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 5px;
+  padding: 3px 10px;
+  font-size: 11.5px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+button.mini:hover {
+  border-color: var(--accent);
+}
+
+button.mini.danger:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.stat-grid {
+  display: grid;
+  gap: 4px;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 8px;
+  align-items: center;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.stat-row b {
+  font-family: ui-monospace, monospace;
+  min-width: 28px;
+  text-align: right;
+}
+
+.stat-row em {
+  font-style: normal;
+  color: var(--accent);
+  font-size: 11px;
+  min-width: 30px;
+  text-align: right;
+}
+
+/* 월드 지도 */
+
+.worldmap {
+  position: relative;
+  height: 460px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin: 8px 0;
+}
+
+.wm-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--text);
+  text-align: center;
+  min-width: 84px;
+}
+
+.wm-node span {
+  display: block;
+  font-size: 11.5px;
+}
+
+.wm-node em {
+  display: block;
+  font-style: normal;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.wm-node.unseen {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.wm-node.seen:hover {
+  border-color: var(--accent);
+}
+
+.wm-node.here {
+  border-color: var(--accent-2);
+  background: rgba(251, 191, 36, 0.12);
+  cursor: default;
+}
+
+/* ---------------------------- 모달 ---------------------------- */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 5, 12, 0.78);
+  display: grid;
+  place-items: center;
+  z-index: 60;
+  padding: 20px;
+}
+
+.modal {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px 22px;
+  width: min(620px, 96vw);
+  max-height: 86vh;
+  overflow-y: auto;
+}
+
+.modal h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.modal h4 {
+  margin: 16px 0 8px;
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dlg-name {
+  color: var(--accent-2);
+}
+
+.quest-offer {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 11px 13px;
+  margin-bottom: 8px;
+}
+
+.quest-offer.complete {
+  border-color: rgba(74, 222, 128, 0.5);
+}
+
+.quest-offer.dim {
+  opacity: 0.6;
+}
+
+.quest-offer .tag {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.quest-offer p {
+  margin: 5px 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.quest-offer .reward {
+  color: var(--accent-2);
+  font-size: 12px;
+}
+
+.quest-offer ul {
+  margin: 5px 0;
+  padding-left: 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.quest-offer li.done {
+  color: var(--ok);
+}
+
+.class-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 8px;
+}
+
+.class-card {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: var(--text);
+}
+
+.class-card:hover {
+  border-color: var(--accent);
+}
+
+.class-card strong {
+  display: block;
+  font-size: 14px;
+}
+
+.class-card .tag {
+  display: block;
+  font-size: 10.5px;
+  color: var(--muted);
+  margin: 2px 0 5px;
+}
+
+.class-card p {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+/* ---------------------------- 캐릭터 생성 ---------------------------- */
+
+.create {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.bg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 7px;
+}
+
+.bg-card {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: var(--text);
+}
+
+.bg-card[aria-selected='true'] {
+  border-color: var(--accent);
+  background: rgba(37, 99, 235, 0.15);
+}
+
+.bg-card strong {
+  display: block;
+  font-size: 13.5px;
+}
+
+.bg-card span {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+button.action.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #06101f;
+  font-weight: 700;
+}
+
+button.action.primary:disabled {
+  background: var(--panel-2);
+  border-color: var(--line);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+button.action.danger:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+@media (max-width: 720px) {
+  .hud-quest {
+    display: none;
+  }
+  .minimap {
+    width: 100px;
+    height: 100px;
+  }
+  .hud-top {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .hud-place {
+    text-align: left;
+  }
+}
+
+.hotbar .slot.empty {
+  opacity: 0.45;
+}

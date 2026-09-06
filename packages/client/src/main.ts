@@ -7,16 +7,19 @@
  * 렌더러 교체는 scenes/TrainingScene.ts의 render 메서드만 건드리면 된다.
  */
 import './style.css';
+import './game.css';
 import { dataSummary } from '@eternia/shared';
 import { TrainingScene } from './scenes/TrainingScene.js';
 import { renderCodex } from './ui/codex.js';
+import { renderGame, stopGame } from './ui/game.js';
 import { renderNickname } from './ui/nickname.js';
 import { renderRoadmap } from './ui/roadmap.js';
 
-type TabId = 'training' | 'codex' | 'nickname' | 'roadmap';
+type TabId = 'adventure' | 'training' | 'codex' | 'nickname' | 'roadmap';
 
 const TABS: { id: TabId; label: string }[] = [
-  { id: 'training', label: '훈련장 (플레이)' },
+  { id: 'adventure', label: '⚔ 모험 시작' },
+  { id: 'training', label: '훈련장' },
   { id: 'codex', label: '도감' },
   { id: 'nickname', label: '닉네임 검증기' },
   { id: 'roadmap', label: '구현 현황' },
@@ -26,7 +29,7 @@ const app = document.querySelector<HTMLDivElement>('#app') as HTMLDivElement;
 const summary = dataSummary();
 
 let scene: TrainingScene | null = null;
-let current: TabId = 'training';
+let current: TabId = 'adventure';
 
 function shell(): void {
   app.innerHTML = `
@@ -71,8 +74,13 @@ function route(): void {
   const view = app.querySelector<HTMLElement>('#view') as HTMLElement;
   scene?.stop();
   scene = null;
+  stopGame();
+  document.querySelectorAll('.side-panel, .modal-backdrop').forEach((n) => n.remove());
 
   switch (current) {
+    case 'adventure':
+      renderGame(view);
+      break;
     case 'training':
       renderTraining(view);
       break;
